@@ -6,7 +6,7 @@
 /*   By: mbamatra <mbamatra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:36:02 by mbamatra          #+#    #+#             */
-/*   Updated: 2024/10/28 22:17:55 by mbamatra         ###   ########.fr       */
+/*   Updated: 2024/11/01 17:49:57 by mbamatra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int check_map_start(char *line)
 	i = 0;
 	while (line[i] == ' ')
 		i++;
-	if (line[i] == '1')
+	if (line[i] == '1' || line[i] == '0')
 		return (1);
 	return (0);
 }
@@ -78,15 +78,15 @@ int count_commas(char *str)
 
 char *str_after_space(char *str)
 {
-	while (*str == ' ')
+	while (str && *str && *str == ' ')
 		str++;
-	while (*str != ' ')
+	while (str && *str && *str != ' ')
 		str++;
-	while (*str == ' ')
+	while (str && *str && *str == ' ')
 		str++;
 	return (str);
 }
-void parse_floor(t_vars *vars, char *str)
+int parse_floor(t_vars *vars, char *str)
 {
 	int i;
 	char **comma_split;
@@ -96,20 +96,21 @@ void parse_floor(t_vars *vars, char *str)
 		str++;
 	str++;
 	if (count_commas(str) != 2)
-		(write(2, "Error\nMore than 2 commas\n", 25), exit(1));
+		return (1);
 	if (*str != ' ')
-		(write(2, "Invalid Component\n", 18), exit(1));
+		return (1);
 	comma_split = ft_split(str, ',');
 	if (array_len(comma_split) != 3)
-		(write(2, "Invalid Component\n", 18), exit(1));
+		return (1);
 	while (comma_split && comma_split[i])
 	{
 		vars->floor->floor_color[i] = ft_atoi(comma_split[i]);
 		i++;
 	}
+	return(0);
 }
 
-void parse_ceiling(t_vars *vars, char *str)
+int parse_ceiling(t_vars *vars, char *str)
 {
 	int i;
 	char **comma_split;
@@ -120,20 +121,86 @@ void parse_ceiling(t_vars *vars, char *str)
 	str++;
 	comma_split = ft_split(str, ',');
 	if (array_len(comma_split) != 3)
-		(write(2, "Invalid Component\n", 18), exit(1));
+		return(1);
 	while (comma_split && comma_split[i])
 	{
 		vars->ceiling->ceiling_colors[i] = ft_atoi(comma_split[i]);
 		i++;
 	}
+	return(0);
 }
 
-void read_map(t_vars *vars, char *file)
+
+int surrounded_by_walls(t_vars *vars)
+{
+	int i = -1;
+	int j = -1;
+	while (++i < vars->map_height)
+	{
+		j = -1;
+		while (++j < (int)ft_strlen(vars->map[i]))
+		{
+			if ((i == 0 || i == vars->map_height - 1) && (vars->map[i][j] != '1' && vars->map[i][j] != ' '))
+				return (1);
+			else if ((j == 0 || j == (int)ft_strlen(vars->map[i])) && (vars->map[i][j] != '1' && vars->map[i][j] != ' '))
+				return (1);
+		}
+	}
+	return(0);
+}
+
+int filling_map(t_vars *vars, char *line, int fd)
+{
+	int i = 0;
+	int flag = 1;
+	while (line)
+	{
+		if (flag && *line != '\0')
+			i++;
+		else
+			flag = 0;
+		free(line);
+		line = get_next_line(fd);
+		if (!flag && line && *line != '\0')
+			return(1);
+	}
+	if (i == 0)
+		return (1);
+	vars->map = malloc((i + 1) * sizeof(char *));
+	if (!vars->map)
+		return (1);
+	close(fd);
+	fd = open(vars->map_name, O_RDONLY);
+	line = get_next_line(fd);
+	while (line)
+	{
+		if (check_map_start(line) == 1)
+			break ;
+		free(line);
+		line = get_next_line(fd);
+	}
+	i = 0;
+	while (line)
+	{
+		if (*line == '\0')
+			break ;
+		vars->map[i++] = line;
+		line = get_next_line(fd);
+	}
+	vars->map_height = i;
+	vars->map[i] = NULL;
+	return (0);
+	// printf("map_height = %d\n", vars->map_height);
+}
+
+int read_map(t_vars *vars, char *file)
 {
 	int fd;
 	int flag[6];
 	char *line;
+	int flag_f = 0;
 	char **str;
+	int counter = 0;
 
 	init_flags(flag);
 	line = NULL;
@@ -143,8 +210,12 @@ void read_map(t_vars *vars, char *file)
 	line = get_next_line(fd);
 	while (line)
 	{
+		counter++;
 		if (check_map_start(line) == 1)
-			break;
+		{
+			flag_f = 1;
+			break ;
+		}
 		str = ft_split(line, ' ');
 		if (str && str[0] && ft_strncmp(str[0], "NO", 2) == 0)
 			vars->no = str_after_space(line), flag[0] += 1;
@@ -155,20 +226,35 @@ void read_map(t_vars *vars, char *file)
 		else if (str && str[0] && ft_strncmp(str[0], "EA", 2) == 0)
 			vars->ea = str_after_space(line), flag[3] += 1;
 		else if (str && str[0] && ft_strncmp(str[0], "F", 1) == 0)
-			parse_floor(vars, line), flag[4] += 1;
+		{
+			flag[4] += 1;
+			if (parse_floor(vars, line) == 1)
+				return(3);
+		}
 		else if (str && str[0] && ft_strncmp(str[0], "C", 1) == 0)
-			parse_ceiling(vars, line), flag[5] += 1;
+		{
+			flag[5] += 1;
+			if (parse_ceiling(vars, line) == 1)
+				return(4);
+		}
 		else if (str && str[0])
-			(write(2, "Error\nInvalid Components\n", 26), exit(1));
+			return (5);
 		line = get_next_line(fd);
 	}
+	counter = validate_comps(vars);
+	if (counter == 1 && flag_f == 1)
+		return (5);
+	else if (counter == 1 && flag_f == 0)
+		return (1);
 	if (flag[0] > 1 || flag[1] > 1 || flag[2] > 1 || flag[3] > 1 
 		|| flag[4] > 1 || flag[5] > 1)
-		(write(2, "Error\nDuplicate Component\n", 27), exit(1));
+			return (1);
+	if (filling_map(vars, line, fd) == 1)
+		return(2);
 	// vars->map_height = i;
 	// vars->map[i] = NULL;
 	close(fd);
-	return ;
+	return (0);
 }
 
 void print_comps(t_vars *vars)
@@ -240,7 +326,7 @@ int validate_comps(t_vars *vars)
 	return (0);
 }
 
-void initialize_vars(t_vars *vars)
+void initialize_vars(t_vars *vars, char **argv)
 {
 	vars->map = NULL;
 	vars->no = NULL;
@@ -256,6 +342,32 @@ void initialize_vars(t_vars *vars)
 	vars->ceiling->ceiling_colors[0] = -1;
 	vars->ceiling->ceiling_colors[1] = -1;
 	vars->ceiling->ceiling_colors[2] = -1;
+	vars->map_name = argv[1];
+}
+
+int all_parsing(t_vars *vars)
+{
+	int i = read_map(vars, vars->map_name);
+	if (i == 1)
+		return(write(2, "Error\nError With The Component\n", 31));
+	else if (i == 2)
+		return(write(2, "Error\nError With The Map\n", 25));
+	else if (i == 3)
+		return(write(2, "Error\nError With The Floor Setting\n", 35));	
+	else if (i == 4)
+		return(write(2, "Error\nError With The Ceiling Setting\n", 35));
+	else if (i == 5)
+		return(write(2, "Error\nFile Shouldn't Start With The Map\n", 40));
+	if (validate_comps(vars) == 1)
+		return(write(2, "Error\n with the components\n", 27));
+	if (surrounded_by_walls(vars) == 1)
+		return(write(2, "Error\nMap Not Surrounded By Walls\n", 34));
+	return(0);
+}
+
+void free_all()
+{
+	return ;
 }
 
 int main(int argc, char **argv)
@@ -265,14 +377,13 @@ int main(int argc, char **argv)
 		return(write(2, "Error\nInvalid Number of Arguments\n", 34));
 	if (validate_mapex(argv[1]) == 1)
 		return(write(2, "Invalid Map Extension\n", 22));
-	initialize_vars(&vars);
-	read_map(&vars, argv[1]);
-	if (validate_comps(&vars) == 1)
-		return(write(2, "Error\nComponent Not Found\n", 27));
-	print_comps(&vars);
+	initialize_vars(&vars, argv);
+	if (all_parsing(&vars) != 0)
+		return(free_all(), 1);
+	// print_comps(&vars);
 	// if (parse_map(&vars) == 1)
 	// 	return(write(2, "Error\nInvalid Map\n", 18));
-	// print_map(&vars);
+	print_map(&vars);
 }
 
 /* 

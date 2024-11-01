@@ -6,10 +6,11 @@
 /*   By: mbamatra <mbamatra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 17:00:41 by mbamatra          #+#    #+#             */
-/*   Updated: 2024/10/28 17:01:39 by mbamatra         ###   ########.fr       */
+/*   Updated: 2024/11/01 17:41:26 by mbamatra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include "../Includes/get_next_line.h"
 
 static void	ft_free(char **ptr)

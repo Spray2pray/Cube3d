@@ -6,7 +6,7 @@
 /*   By: mbamatra <mbamatra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:33:33 by mbamatra          #+#    #+#             */
-/*   Updated: 2024/10/28 21:20:02 by mbamatra         ###   ########.fr       */
+/*   Updated: 2024/11/01 16:38:16 by mbamatra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,12 @@ typedef struct s_vars {
 	char *so;
 	char *we;
 	char *ea;
+	char *map_name;
 	struct s_floor *floor;
 	struct s_ceiling *ceiling;
 	int map_height;
 }	t_vars;
+
+int validate_comps(t_vars *vars);
 
 #endif
