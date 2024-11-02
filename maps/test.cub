@@ -1,17 +1,13 @@
-
-F      1,0, 3
-      NO      ./path_to_the_north_texture   ll
+NO ./path_to_the_north_texture  asdlfkajsdflkjf
 SO ./path_to_the_south_texture
-C       225,30,0
-1     11111   1    
-111111 
-111111  
-WE ./path_to_the_west_texture     asd      
-EA   
+EA ./path_to_the_south_texture
+WE ./path_to_the_west_texture    
 
+C 0,30,251
+F 1,0,255
 
-
-
-
-
+               1
+1111  1   1   101
+11111101111   1S1
+1111111111     1
 

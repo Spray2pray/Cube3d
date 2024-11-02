@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.c                                            :+:      :+:    :+:   */
+/*   cub3d                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbamatra <mbamatra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:36:02 by mbamatra          #+#    #+#             */
-/*   Updated: 2024/11/01 17:49:57 by mbamatra         ###   ########.fr       */
+/*   Updated: 2024/11/02 19:50:10 by mbamatra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,68 @@ void init_flags(int *flag)
 	flag[5] = 0;
 }
 
+int validate_characters(t_vars *vars)
+{
+	int i;
+	int j;
+	int flag;
+
+	flag = 0;
+	i = -1;
+	j = -1;
+	while (++i < vars->map_height)
+	{
+		j = -1;
+		while (++j < (int)ft_strlen(vars->map[i]))
+		{
+			if (vars->map[i][j] != '0' && vars->map[i][j] != '1' && vars->map[i][j] != ' ')
+			{
+				if (check_for_player(vars->map[i][j]))
+				{
+					vars->player_x = j;
+					vars->player_y = i;
+					flag++;
+				}
+				else
+					return(1);
+			}
+		}
+	}
+	if (flag != 1)
+		return(2);
+	return(0);
+}
+
+int check_for_player(char c)
+{
+	return (c == 'N' || c == 'S' || c == 'E' || c == 'W');
+}
+
+int validate_zero(t_vars *vars)
+{
+	int i;
+	int j;
+
+	j = -1;
+	i = -1;
+	while (++i < vars->map_height)
+	{
+		j = -1;
+		while (++j < (int)ft_strlen(vars->map[i]))
+		{
+			if (vars->map[i][j] == '0' || check_for_player(vars->map[i][j]))
+			{
+				if (j >= (int)ft_strlen(vars->map[i + 1]) || j >= (int)ft_strlen(vars->map[i - 1]))
+					return(1);
+				else if (vars->map[i][j + 1] == ' ' || vars->map[i][j - 1] == ' '
+				|| (vars->map[i + 1][j] == ' ' || vars->map[i - 1][j] == ' '))
+					return(1);
+			}
+		}
+	}
+	return(0);
+}
+
 int array_len(char **str)
 {
 	int i = 0;
@@ -97,8 +159,6 @@ int parse_floor(t_vars *vars, char *str)
 	str++;
 	if (count_commas(str) != 2)
 		return (1);
-	if (*str != ' ')
-		return (1);
 	comma_split = ft_split(str, ',');
 	if (array_len(comma_split) != 3)
 		return (1);
@@ -107,6 +167,9 @@ int parse_floor(t_vars *vars, char *str)
 		vars->floor->floor_color[i] = ft_atoi(comma_split[i]);
 		i++;
 	}
+	if (vars->floor->floor_color[0] == -1 || vars->floor->floor_color[1] == -1 ||
+		vars->floor->floor_color[2] == -1)
+		return(1);
 	return(0);
 }
 
@@ -119,6 +182,8 @@ int parse_ceiling(t_vars *vars, char *str)
 	while (*str == ' ')
 		str++;
 	str++;
+	if (count_commas(str) != 2)
+		return (1);
 	comma_split = ft_split(str, ',');
 	if (array_len(comma_split) != 3)
 		return(1);
@@ -127,6 +192,9 @@ int parse_ceiling(t_vars *vars, char *str)
 		vars->ceiling->ceiling_colors[i] = ft_atoi(comma_split[i]);
 		i++;
 	}
+	if (vars->ceiling->ceiling_colors[0] == -1 || vars->ceiling->ceiling_colors[1] == -1 ||
+		vars->ceiling->ceiling_colors[2] == -1)
+		return (1);
 	return(0);
 }
 
@@ -217,37 +285,37 @@ int read_map(t_vars *vars, char *file)
 			break ;
 		}
 		str = ft_split(line, ' ');
-		if (str && str[0] && ft_strncmp(str[0], "NO", 2) == 0)
+		if (str && str[0] && ft_strncmp(str[0], "NO", 3) == 0)
 			vars->no = str_after_space(line), flag[0] += 1;
-		else if (str && str[0] && ft_strncmp(str[0], "SO", 2) == 0)
+		else if (str && str[0] && ft_strncmp(str[0], "SO", 3) == 0)
 			vars->so = str_after_space(line), flag[1] += 1;
-		else if (str && str[0] && ft_strncmp(str[0], "WE", 2) == 0)
+		else if (str && str[0] && ft_strncmp(str[0], "WE", 3) == 0)
 			vars->we = str_after_space(line), flag[2] += 1;
-		else if (str && str[0] && ft_strncmp(str[0], "EA", 2) == 0)
+		else if (str && str[0] && ft_strncmp(str[0], "EA", 3) == 0)
 			vars->ea = str_after_space(line), flag[3] += 1;
-		else if (str && str[0] && ft_strncmp(str[0], "F", 1) == 0)
+		else if (str && str[0] && ft_strncmp(str[0], "F", 2) == 0)
 		{
 			flag[4] += 1;
 			if (parse_floor(vars, line) == 1)
 				return(3);
 		}
-		else if (str && str[0] && ft_strncmp(str[0], "C", 1) == 0)
+		else if (str && str[0] && ft_strncmp(str[0], "C", 2) == 0)
 		{
 			flag[5] += 1;
 			if (parse_ceiling(vars, line) == 1)
 				return(4);
 		}
 		else if (str && str[0])
-			return (5);
+			return (1);
 		line = get_next_line(fd);
 	}
 	counter = validate_comps(vars);
 	if (counter == 1 && flag_f == 1)
-		return (5);
+		return (6);
 	else if (counter == 1 && flag_f == 0)
 		return (1);
-	if (flag[0] > 1 || flag[1] > 1 || flag[2] > 1 || flag[3] > 1 
-		|| flag[4] > 1 || flag[5] > 1)
+	if (flag[0] != 1 || flag[1] != 1 || flag[2] != 1 || flag[3] != 1 
+		|| flag[4] != 1 || flag[5] != 1)
 			return (1);
 	if (filling_map(vars, line, fd) == 1)
 		return(2);
@@ -317,12 +385,6 @@ int validate_comps(t_vars *vars)
 {
 	if (!vars->no || !vars->so || !vars->we || !vars->ea)
 		return (1);
-	if (vars->floor->floor_color[0] == -1 || vars->floor->floor_color[1] == -1 ||
-		vars->floor->floor_color[2] == -1)
-		return(1);
-	if (vars->ceiling->ceiling_colors[0] == -1 || vars->ceiling->ceiling_colors[1] == -1 ||
-		vars->ceiling->ceiling_colors[2] == -1)
-		return (1);
 	return (0);
 }
 
@@ -333,6 +395,8 @@ void initialize_vars(t_vars *vars, char **argv)
 	vars->so = NULL;
 	vars->we = NULL;
 	vars->ea = NULL;
+	vars->player_x = -1;
+	vars->player_y = -1;
 	vars->map_height = 0;
 	vars->floor = malloc(sizeof(t_floor));
 	vars->ceiling = malloc(sizeof(t_ceiling));
@@ -347,7 +411,9 @@ void initialize_vars(t_vars *vars, char **argv)
 
 int all_parsing(t_vars *vars)
 {
-	int i = read_map(vars, vars->map_name);
+	int i;
+
+	i = read_map(vars, vars->map_name);
 	if (i == 1)
 		return(write(2, "Error\nError With The Component\n", 31));
 	else if (i == 2)
@@ -355,13 +421,20 @@ int all_parsing(t_vars *vars)
 	else if (i == 3)
 		return(write(2, "Error\nError With The Floor Setting\n", 35));	
 	else if (i == 4)
-		return(write(2, "Error\nError With The Ceiling Setting\n", 35));
-	else if (i == 5)
+		return(write(2, "Error\nError With The Ceiling Setting\n", 37));
+	else if (i == 6)
 		return(write(2, "Error\nFile Shouldn't Start With The Map\n", 40));
 	if (validate_comps(vars) == 1)
-		return(write(2, "Error\n with the components\n", 27));
+		return(write(2, "Error\nError With The Components\n", 32));
 	if (surrounded_by_walls(vars) == 1)
 		return(write(2, "Error\nMap Not Surrounded By Walls\n", 34));
+	if (validate_zero(vars) == 1)
+		return(write(2, "Error\nInvalid Path\n", 19));
+	i = validate_characters(vars);
+	if (i == 2)
+		return(write(2, "Error\nInvalid Character\n", 24));
+	else if (i == 1)
+		return(write(2, "Error\nInvalid Player Count\n", 27));
 	return(0);
 }
 
@@ -380,9 +453,9 @@ int main(int argc, char **argv)
 	initialize_vars(&vars, argv);
 	if (all_parsing(&vars) != 0)
 		return(free_all(), 1);
-	// print_comps(&vars);
-	// if (parse_map(&vars) == 1)
-	// 	return(write(2, "Error\nInvalid Map\n", 18));
+	print_comps(&vars);
+	if (open("cub3d.c", O_RDONLY) == -1)
+		puts("Hello");
 	print_map(&vars);
 }
 
