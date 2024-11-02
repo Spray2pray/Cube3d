@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d                                              :+:      :+:    :+:   */
+/*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbamatra <mbamatra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:36:02 by mbamatra          #+#    #+#             */
-/*   Updated: 2024/11/02 19:50:10 by mbamatra         ###   ########.fr       */
+/*   Updated: 2024/11/02 23:46:34 by mbamatra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,16 +161,16 @@ int parse_floor(t_vars *vars, char *str)
 		return (1);
 	comma_split = ft_split(str, ',');
 	if (array_len(comma_split) != 3)
-		return (1);
+		return (free_double(comma_split, NULL), 1);
 	while (comma_split && comma_split[i])
 	{
-		vars->floor->floor_color[i] = ft_atoi(comma_split[i]);
+		vars->floor_color[i] = ft_atoi(comma_split[i]);
 		i++;
 	}
-	if (vars->floor->floor_color[0] == -1 || vars->floor->floor_color[1] == -1 ||
-		vars->floor->floor_color[2] == -1)
-		return(1);
-	return(0);
+	if (vars->floor_color[0] == -1 || vars->floor_color[1] == -1 ||
+		vars->floor_color[2] == -1)
+		return(free_double(comma_split, NULL), 1);
+	return(free_double(comma_split, NULL), 0);
 }
 
 int parse_ceiling(t_vars *vars, char *str)
@@ -186,16 +186,16 @@ int parse_ceiling(t_vars *vars, char *str)
 		return (1);
 	comma_split = ft_split(str, ',');
 	if (array_len(comma_split) != 3)
-		return(1);
+		return(free_double(comma_split, NULL), 1);
 	while (comma_split && comma_split[i])
 	{
-		vars->ceiling->ceiling_colors[i] = ft_atoi(comma_split[i]);
+		vars->ceiling_colors[i] = ft_atoi(comma_split[i]);
 		i++;
 	}
-	if (vars->ceiling->ceiling_colors[0] == -1 || vars->ceiling->ceiling_colors[1] == -1 ||
-		vars->ceiling->ceiling_colors[2] == -1)
-		return (1);
-	return(0);
+	if (vars->ceiling_colors[0] == -1 || vars->ceiling_colors[1] == -1 ||
+		vars->ceiling_colors[2] == -1)
+		return(free_double(comma_split, NULL), 1);
+	return(free_double(comma_split, NULL), 0);
 }
 
 
@@ -230,7 +230,7 @@ int filling_map(t_vars *vars, char *line, int fd)
 		free(line);
 		line = get_next_line(fd);
 		if (!flag && line && *line != '\0')
-			return(1);
+			return(free_double(NULL, line), 1);
 	}
 	if (i == 0)
 		return (1);
@@ -252,7 +252,8 @@ int filling_map(t_vars *vars, char *line, int fd)
 	{
 		if (*line == '\0')
 			break ;
-		vars->map[i++] = line;
+		vars->map[i++] = ft_strdup(line);
+		free(line);
 		line = get_next_line(fd);
 	}
 	vars->map_height = i;
@@ -272,6 +273,7 @@ int read_map(t_vars *vars, char *file)
 
 	init_flags(flag);
 	line = NULL;
+	str = NULL;
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		(write(2, "Failed to open file\n", 20), exit(1));
@@ -281,44 +283,47 @@ int read_map(t_vars *vars, char *file)
 		counter++;
 		if (check_map_start(line) == 1)
 		{
+			free_double(str, NULL);
 			flag_f = 1;
 			break ;
 		}
+		free_double(str, NULL);
 		str = ft_split(line, ' ');
 		if (str && str[0] && ft_strncmp(str[0], "NO", 3) == 0)
-			vars->no = str_after_space(line), flag[0] += 1;
+			vars->no = ft_strdup(str_after_space(line)), flag[0] += 1;
 		else if (str && str[0] && ft_strncmp(str[0], "SO", 3) == 0)
-			vars->so = str_after_space(line), flag[1] += 1;
+			vars->so = ft_strdup(str_after_space(line)), flag[1] += 1;
 		else if (str && str[0] && ft_strncmp(str[0], "WE", 3) == 0)
-			vars->we = str_after_space(line), flag[2] += 1;
+			vars->we = ft_strdup(str_after_space(line)), flag[2] += 1;
 		else if (str && str[0] && ft_strncmp(str[0], "EA", 3) == 0)
-			vars->ea = str_after_space(line), flag[3] += 1;
+			vars->ea = ft_strdup(str_after_space(line)), flag[3] += 1;
 		else if (str && str[0] && ft_strncmp(str[0], "F", 2) == 0)
 		{
 			flag[4] += 1;
 			if (parse_floor(vars, line) == 1)
-				return(3);
+				return(free_double(str, line), 3);
 		}
 		else if (str && str[0] && ft_strncmp(str[0], "C", 2) == 0)
 		{
 			flag[5] += 1;
 			if (parse_ceiling(vars, line) == 1)
-				return(4);
+				return(free_double(str, line), 4);
 		}
 		else if (str && str[0])
-			return (1);
+			return(free_double(str, line), 1);
+		free(line);
 		line = get_next_line(fd);
 	}
 	counter = validate_comps(vars);
 	if (counter == 1 && flag_f == 1)
-		return (6);
+		return(free_double(NULL, line), 6);
 	else if (counter == 1 && flag_f == 0)
-		return (1);
+		return(free_double(str, line), 1);
 	if (flag[0] != 1 || flag[1] != 1 || flag[2] != 1 || flag[3] != 1 
 		|| flag[4] != 1 || flag[5] != 1)
-			return (1);
+			return(free_double(NULL, line), 1);
 	if (filling_map(vars, line, fd) == 1)
-		return(2);
+		return(3);
 	// vars->map_height = i;
 	// vars->map[i] = NULL;
 	close(fd);
@@ -331,8 +336,8 @@ void print_comps(t_vars *vars)
 	printf("SO: (%s)\n", vars->so);
 	printf("WE: (%s)\n", vars->we);
 	printf("EA: (%s)\n", vars->ea);
-	printf("Floor: %d %d %d\n", vars->floor->floor_color[0], vars->floor->floor_color[1], vars->floor->floor_color[2]);
-	printf("Ceiling: %d %d %d\n", vars->ceiling->ceiling_colors[0], vars->ceiling->ceiling_colors[1], vars->ceiling->ceiling_colors[2]);
+	printf("Floor: %d %d %d\n", vars->floor_color[0], vars->floor_color[1], vars->floor_color[2]);
+	printf("Ceiling: %d %d %d\n", vars->ceiling_colors[0], vars->ceiling_colors[1], vars->ceiling_colors[2]);
 }
 // void read_map(t_vars *vars, char *file)
 // {
@@ -398,14 +403,12 @@ void initialize_vars(t_vars *vars, char **argv)
 	vars->player_x = -1;
 	vars->player_y = -1;
 	vars->map_height = 0;
-	vars->floor = malloc(sizeof(t_floor));
-	vars->ceiling = malloc(sizeof(t_ceiling));
-	vars->floor->floor_color[0] = -1;
-	vars->floor->floor_color[1] = -1;
-	vars->floor->floor_color[2] = -1;
-	vars->ceiling->ceiling_colors[0] = -1;
-	vars->ceiling->ceiling_colors[1] = -1;
-	vars->ceiling->ceiling_colors[2] = -1;
+	vars->floor_color[0] = -1;
+	vars->floor_color[1] = -1;
+	vars->floor_color[2] = -1;
+	vars->ceiling_colors[0] = -1;
+	vars->ceiling_colors[1] = -1;
+	vars->ceiling_colors[2] = -1;
 	vars->map_name = argv[1];
 }
 
@@ -438,10 +441,43 @@ int all_parsing(t_vars *vars)
 	return(0);
 }
 
-void free_all()
+void free_double(char **map, char *str)
 {
-	return ;
+	int i;
+
+	i = 0;
+	if (str)
+	{
+		free(str);
+		str = NULL;
+	}
+	if (!map)
+		return ;
+	while (map[i])
+	{
+		free(map[i]);
+		i++;
+	}
+	free(map);
+	map = NULL;
 }
+
+void free_all(t_vars *vars)
+{
+	if (vars->map)
+		free_double(vars->map, NULL);
+	if (vars->no)
+		free(vars->no);
+	if (vars->so)
+		free(vars->so);
+	if (vars->we)
+		free(vars->we);
+	if (vars->ea)
+		free(vars->ea);
+	
+}
+
+
 
 int main(int argc, char **argv)
 {
@@ -452,29 +488,7 @@ int main(int argc, char **argv)
 		return(write(2, "Invalid Map Extension\n", 22));
 	initialize_vars(&vars, argv);
 	if (all_parsing(&vars) != 0)
-		return(free_all(), 1);
-	print_comps(&vars);
-	if (open("cub3d.c", O_RDONLY) == -1)
-		puts("Hello");
-	print_map(&vars);
+		return(free_all(&vars), 1);
+	// print_comps(&vars);
+	// print_map(&vars);
 }
-
-/* 
-if (vars->map[i][j] == ' ' || vars->map[i][j] == '\0')
-				j++;
-			if (ft_strncmp(vars->map[i], "NO ", 3) == 0)
-				printf("NO\n");
-			else if (ft_strncmp(vars->map[i], "SO ", 3) == 0)
-				printf("SO\n");
-			else if (ft_strncmp(vars->map[i], "WE ", 3) == 0)
-				printf("WE\n");
-			else if (ft_strncmp(vars->map[i], "EA ", 3) == 0)
-				printf("EA\n");
-			else if (ft_strncmp(vars->map[i], "F ", 2) == 0)
-				printf("F\n");
-			else if (ft_strncmp(vars->map[i], "C ", 2) == 0)
-				printf("C\n");
-			else if (vars->map[i][j] == '1' || vars->map[i][j] == '0')
-				printf("Map\n");
-			else
-				return (1);*/
