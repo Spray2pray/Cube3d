@@ -6,7 +6,7 @@
 /*   By: mbamatra <mbamatra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:36:02 by mbamatra          #+#    #+#             */
-/*   Updated: 2024/11/02 23:46:34 by mbamatra         ###   ########.fr       */
+/*   Updated: 2024/11/14 01:52:30 by mbamatra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,10 @@ int parse_floor(t_vars *vars, char *str)
 		return (1);
 	comma_split = ft_split(str, ',');
 	if (array_len(comma_split) != 3)
+	{
+		printf("array len = %d\n", array_len(comma_split));
 		return (free_double(comma_split, NULL), 1);
+	}
 	while (comma_split && comma_split[i])
 	{
 		vars->floor_color[i] = ft_atoi(comma_split[i]);
@@ -210,7 +213,7 @@ int surrounded_by_walls(t_vars *vars)
 		{
 			if ((i == 0 || i == vars->map_height - 1) && (vars->map[i][j] != '1' && vars->map[i][j] != ' '))
 				return (1);
-			else if ((j == 0 || j == (int)ft_strlen(vars->map[i])) && (vars->map[i][j] != '1' && vars->map[i][j] != ' '))
+			else if ((j == 0 || j == (int)ft_strlen(vars->map[i]) - 1) && (vars->map[i][j] != '1' && vars->map[i][j] != ' '))
 				return (1);
 		}
 	}
@@ -370,10 +373,10 @@ int validate_mapex(char *file)
 	int i = 0;
 	while (file[i])
 		i++;
-	if (!(file[i - 1] == 'u' || file[i - 2] == 'u' 
-		|| file[i - 3] == 'c' || file[i - 4] == '.'))
-		return (1);
-	return (0);
+	if ((file[i - 1] == 'b' && file[i - 2] == 'u' 
+		&& file[i - 3] == 'c' && file[i - 4] == '.'))
+		return (0);
+	return (1);
 }
 
 void print_map(t_vars *vars)
@@ -438,6 +441,8 @@ int all_parsing(t_vars *vars)
 		return(write(2, "Error\nInvalid Character\n", 24));
 	else if (i == 1)
 		return(write(2, "Error\nInvalid Player Count\n", 27));
+	// else if (i == 3)
+	// 	return(write(2, "Error\nInvalid Path\n", 19));
 	return(0);
 }
 
@@ -489,6 +494,6 @@ int main(int argc, char **argv)
 	initialize_vars(&vars, argv);
 	if (all_parsing(&vars) != 0)
 		return(free_all(&vars), 1);
-	// print_comps(&vars);
-	// print_map(&vars);
+	print_comps(&vars);
+	print_map(&vars);
 }

@@ -5,7 +5,7 @@ SRCS = cub3d.c get_next_line/get_next_line.c \
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror -g3 -I Includes -I libft
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3 -I Includes -I libft
 
 OBJS = $(SRCS:.c=.o)
 
@@ -14,6 +14,8 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
+run: $(NAME)
+	./cub3d maps/test.cub
 clean:
 	rm -f $(OBJS)
 
