@@ -6,7 +6,7 @@
 /*   By: mbamatra <mbamatra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 23:44:15 by mbamatra          #+#    #+#             */
-/*   Updated: 2024/01/21 13:01:00 by mbamatra         ###   ########.fr       */
+/*   Updated: 2024/11/27 14:52:16 by mbamatra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 void	ft_putnbr_fd(int n, int fd)
 {
-	if ((n > 2147483647) || (n < -2147483648))
-		return ;
 	if (n == 0)
 	{
 		ft_putchar_fd('0', fd);

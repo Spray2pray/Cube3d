@@ -6,7 +6,7 @@
 /*   By: mbamatra <mbamatra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:36:02 by mbamatra          #+#    #+#             */
-/*   Updated: 2024/11/14 01:52:30 by mbamatra         ###   ########.fr       */
+/*   Updated: 2024/11/27 15:35:22 by mbamatra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,7 +254,10 @@ int filling_map(t_vars *vars, char *line, int fd)
 	while (line)
 	{
 		if (*line == '\0')
+		{
+			free(line);
 			break ;
+		}
 		vars->map[i++] = ft_strdup(line);
 		free(line);
 		line = get_next_line(fd);
@@ -293,24 +296,44 @@ int read_map(t_vars *vars, char *file)
 		free_double(str, NULL);
 		str = ft_split(line, ' ');
 		if (str && str[0] && ft_strncmp(str[0], "NO", 3) == 0)
-			vars->no = ft_strdup(str_after_space(line)), flag[0] += 1;
+		{
+			if (flag[0] == 0)
+				vars->no = ft_strdup(str_after_space(line)), flag[0] += 1;
+			else
+				return(free_double(str, line), 1);
+		}
 		else if (str && str[0] && ft_strncmp(str[0], "SO", 3) == 0)
-			vars->so = ft_strdup(str_after_space(line)), flag[1] += 1;
+		{
+			if (flag[1] == 0)
+				vars->so = ft_strdup(str_after_space(line)), flag[1] += 1;
+			else
+				return(free_double(str, line), 1);
+		}
 		else if (str && str[0] && ft_strncmp(str[0], "WE", 3) == 0)
-			vars->we = ft_strdup(str_after_space(line)), flag[2] += 1;
+		{
+			if (flag[2] == 0)
+				vars->we = ft_strdup(str_after_space(line)), flag[2] += 1;
+			else
+				return(free_double(str, line), 1);
+		}
 		else if (str && str[0] && ft_strncmp(str[0], "EA", 3) == 0)
-			vars->ea = ft_strdup(str_after_space(line)), flag[3] += 1;
+		{
+			if (flag[3] == 0)
+				vars->ea = ft_strdup(str_after_space(line)), flag[3] += 1;
+			else
+				return(free_double(str, line), 1);
+		}
 		else if (str && str[0] && ft_strncmp(str[0], "F", 2) == 0)
 		{
+			if (flag[4] || parse_floor(vars, line) == 1)
+					return(free_double(str, line), 3);
 			flag[4] += 1;
-			if (parse_floor(vars, line) == 1)
-				return(free_double(str, line), 3);
 		}
 		else if (str && str[0] && ft_strncmp(str[0], "C", 2) == 0)
 		{
+			if (flag[5] || parse_floor(vars, line) == 1)
+					return(free_double(str, line), 3);
 			flag[5] += 1;
-			if (parse_ceiling(vars, line) == 1)
-				return(free_double(str, line), 4);
 		}
 		else if (str && str[0])
 			return(free_double(str, line), 1);
@@ -326,7 +349,7 @@ int read_map(t_vars *vars, char *file)
 		|| flag[4] != 1 || flag[5] != 1)
 			return(free_double(NULL, line), 1);
 	if (filling_map(vars, line, fd) == 1)
-		return(3);
+		return(7);
 	// vars->map_height = i;
 	// vars->map[i] = NULL;
 	close(fd);
@@ -430,6 +453,8 @@ int all_parsing(t_vars *vars)
 		return(write(2, "Error\nError With The Ceiling Setting\n", 37));
 	else if (i == 6)
 		return(write(2, "Error\nFile Shouldn't Start With The Map\n", 40));
+	else if (i == 7)
+		return(write(2, "Error\nInvalid Map\n", 18));
 	if (validate_comps(vars) == 1)
 		return(write(2, "Error\nError With The Components\n", 32));
 	if (surrounded_by_walls(vars) == 1)
@@ -496,4 +521,5 @@ int main(int argc, char **argv)
 		return(free_all(&vars), 1);
 	print_comps(&vars);
 	print_map(&vars);
+	free_all(&vars);
 }
