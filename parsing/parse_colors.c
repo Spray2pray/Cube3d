@@ -6,11 +6,11 @@
 /*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 15:24:42 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/05 15:33:30 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/13 13:02:51 by asid-ahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../Includes/cub3d.h"
+#include "../cub3d.h"
 
 static int	array_len(char **str)
 {

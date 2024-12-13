@@ -6,12 +6,12 @@
 /*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 17:00:41 by mbamatra          #+#    #+#             */
-/*   Updated: 2024/12/05 16:55:39 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/13 13:00:27 by asid-ahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include "../Includes/get_next_line.h"
+#include "get_next_line.h"
 
 static void	ft_free(char **ptr)
 {

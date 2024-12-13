@@ -6,11 +6,11 @@
 /*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:10:42 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/05 14:29:56 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/13 13:42:40 by asid-ahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../Includes/cub3d.h"
+#include "../cub3d.h"
 
 void	init_flags(int *flag)
 {
@@ -24,6 +24,7 @@ void	init_flags(int *flag)
 
 void	initialize_vars(t_vars *vars, char **argv)
 {
+	vars->size = 30;
 	vars->map = NULL;
 	vars->no = NULL;
 	vars->so = NULL;

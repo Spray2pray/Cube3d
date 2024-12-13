@@ -6,11 +6,11 @@
 /*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:36:02 by mbamatra          #+#    #+#             */
-/*   Updated: 2024/12/05 16:22:47 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:29:58 by asid-ahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Includes/cub3d.h"
+#include "cub3d.h"
 
 int	validate_mapex(char *file)
 {
@@ -63,7 +63,16 @@ int	main(int argc, char **argv)
 	initialize_vars(&vars, argv);
 	if (all_parsing(&vars) != 0)
 		return (close(vars.map_fd), free_all(&vars), 1);
+	close(vars.map_fd);
+	if (init_mlx(&vars))
+		return (free_all(&vars), 1);
 	print_comps(&vars);
 	print_map(&vars);
-	free_all(&vars);
+	// draw_map2d(&vars);
+	// Use `mlx_images` (please, for the love of God and everything that is beautiful and sacred).
+	// Drugs are bad m'kay?
+	mlx_loop_hook(vars.mlx, draw_map2d, &vars);
+	mlx_hook(vars.mlx_win, 2, 0, ft_move, &vars);
+	mlx_hook(vars.mlx_win, 17, 0, ft_quit, &vars);
+	mlx_loop(vars.mlx);
 }

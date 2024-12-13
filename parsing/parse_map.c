@@ -6,16 +6,16 @@
 /*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 16:17:08 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/05 16:56:39 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/13 14:27:29 by asid-ahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../Includes/cub3d.h"
+#include "../cub3d.h"
 
 static void	set_player_pos(t_vars *vars, int i, int j)
 {
-	vars->player_x = j;
-	vars->player_y = i;
+	vars->player_x = j * vars->size + vars->size/3;
+	vars->player_y = i * vars->size + vars->size/3;
 }
 
 int	validate_characters(t_vars *vars)

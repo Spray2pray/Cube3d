@@ -6,11 +6,11 @@
 /*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 15:56:02 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/05 16:15:09 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/13 13:02:51 by asid-ahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../Includes/cub3d.h"
+#include "../cub3d.h"
 
 static int	surrounded_by_walls(t_vars *vars)
 {

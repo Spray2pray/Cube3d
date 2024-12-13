@@ -6,37 +6,47 @@
 #    By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/05 16:48:25 by asid-ahm          #+#    #+#              #
-#    Updated: 2024/12/05 16:49:14 by asid-ahm         ###   ########.fr        #
+#    Updated: 2024/12/13 13:12:52 by asid-ahm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3d
 
-SRCS = cub3d.c ./parsing/all_free.c ./parsing/initialize_vars.c get_next_line/get_next_line.c \
+SRCS = cub3d.c ./parsing/all_free.c ./parsing/initialize_vars.c gnl/get_next_line.c \
 		./parsing/parse_colors.c ./parsing/printing_file.c ./parsing/validate_map.c\
-		./parsing/parse_map.c ./parsing/parse_comps.c
+		./parsing/parse_map.c ./parsing/parse_comps.c ./execute/mlx_init.c \
+		./execute/move.c execute/render_map.c
 
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g3 -I Includes -I $(LIBFT_DIR)
+MLX_DIR = mlx
+MLX = $(MLX_DIR)/libmlx.a
+
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -g3 -I Includes -I $(LIBFT_DIR) -I $(MLX_DIR) -O3
 
 OBJS = $(SRCS:.c=.o)
-
 all: $(NAME)
 
-$(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS) -L $(LIBFT_DIR) -lft -o $(NAME)
-
 $(LIBFT):
-	make -C $(LIBFT_DIR)
+	make -C libft
+$(MLX):
+	make -C mlx
+
+%.o: %.c
+	$(CC) -Wall -Wextra -Werror -Imlx -g3 -c $< -o $@
+
+$(NAME): $(OBJS) $(LIBFT) $(MLX)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(MLX) -framework OpenGL -framework AppKit -o $(NAME)
 
 clean:
-	make fclean -C $(LIBFT_DIR)
+	make clean -C $(LIBFT_DIR)
+	make clean -C $(MLX_DIR)
 	rm -f $(OBJS)
 
 fclean: clean
+	make fclean -C $(LIBFT_DIR)
 	rm -rf $(NAME)
 
 re: fclean all

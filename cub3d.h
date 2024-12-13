@@ -6,7 +6,7 @@
 /*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:33:33 by mbamatra          #+#    #+#             */
-/*   Updated: 2024/12/05 16:55:56 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:38:30 by asid-ahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,24 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdlib.h>
-# include "get_next_line.h"
+# include "../gnl/get_next_line.h"
 # include "../libft/libft.h"
+# include "../mlx/mlx.h"
 
 typedef struct s_vars
 {
+	void	*mlx;
+	void	*mlx_win;
+	void	*img;
+	char	*adrr;
+	int		bpp;
 	char	**map;
 	char	*no;
 	char	*so;
 	char	*we;
 	char	*ea;
 	int		map_fd;
+	int		size;
 	char	*map_name;
 	int		floor_color[3];
 	int		ceiling_colors[3];
@@ -34,6 +41,7 @@ typedef struct s_vars
 	int		player_x;
 	int		player_y;
 }	t_vars;
+
 
 void	initialize_vars(t_vars *vars, char **argv);
 void	init_flags(int *flag);
@@ -50,4 +58,9 @@ void	print_map(t_vars *vars);
 int		filling_map(t_vars *vars, char *line, int fd);
 int		read_map(t_vars *vars, char *file);
 
+int		init_mlx(t_vars *vars);
+int		ft_quit(t_vars *map);
+int		ft_move(int keycode, t_vars *map);
+void	draw_player(t_vars *vars, int x_start, int y_start, int color);
+int		draw_map2d(t_vars *vars);
 #endif
