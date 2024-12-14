@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:33:33 by mbamatra          #+#    #+#             */
-/*   Updated: 2024/12/13 15:38:30 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/13 20:27:43 by louisalah        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,21 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdlib.h>
+# include <math.h>
 # include "../gnl/get_next_line.h"
 # include "../libft/libft.h"
 # include "../mlx/mlx.h"
 
 typedef struct s_vars
 {
+	int		angle;
 	void	*mlx;
 	void	*mlx_win;
-	void	*img;
-	char	*adrr;
-	int		bpp;
+	void    *img;
+    char    *addr;
+    int     bits_per_pixel;
+    int     line_length;
+    int     endian;
 	char	**map;
 	char	*no;
 	char	*so;
@@ -63,4 +67,5 @@ int		ft_quit(t_vars *map);
 int		ft_move(int keycode, t_vars *map);
 void	draw_player(t_vars *vars, int x_start, int y_start, int color);
 int		draw_map2d(t_vars *vars);
+int		round_down(float x);
 #endif

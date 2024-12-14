@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_comps.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 16:23:15 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/13 13:02:51 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/13 19:10:50 by louisalah        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	read_map(t_vars *vars, char *file)
 	line = NULL;
 	str = NULL;
 	vars->map_fd = open(file, O_RDONLY);
+	printf("map_fd = %s\n", file);
 	fd = vars->map_fd;
 	if (fd < 0)
 		(write(2, "Failed to open file\n", 20), exit(1));

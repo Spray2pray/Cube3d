@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialize_vars.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:10:42 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/13 13:42:40 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/13 19:12:24 by louisalah        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	init_flags(int *flag)
 void	initialize_vars(t_vars *vars, char **argv)
 {
 	vars->size = 30;
+	vars->angle = -1;
 	vars->map = NULL;
 	vars->no = NULL;
 	vars->so = NULL;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:29:51 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/13 13:26:53 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/13 18:03:27 by louisalah        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,18 @@ int	init_mlx(t_vars *data)
 		printf("failed to init window");
 		return (1);
 	}
+	
+	// Create new image
+	data->img = mlx_new_image(data->mlx, 1000, 1000);
+	if (!data->img)
+	{
+		printf("failed to create image");
+		return (1);
+	}
+	
+	// Get image data
+	data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel, 
+								  &data->line_length, &data->endian);
+	
 	return (0);
 }
