@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   printing_file.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
+/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 15:34:52 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/13 19:02:43 by louisalah        ###   ########.fr       */
+/*   Updated: 2024/12/14 19:15:45 by asid-ahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ void	print_map(t_vars *vars)
 	int	i;
 
 	i = 0;
-	printf("players x = %d\n", vars->player_x);
-	printf("players y = %d\n", vars->player_y);
+	printf("players x = %f\n", vars->player_x);
+	printf("players y = %f\n", vars->player_y);
 	while (vars->map[i])
 	{
 		printf("%s\n", vars->map[i]);

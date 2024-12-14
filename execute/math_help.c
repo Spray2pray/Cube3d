@@ -3,16 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   math_help.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
+/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 20:25:34 by louisalah         #+#    #+#             */
-/*   Updated: 2024/12/13 20:26:13 by louisalah        ###   ########.fr       */
+/*   Updated: 2024/12/14 19:24:14 by asid-ahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-int round_down(float x)
+void	adjust_angle(int *angle)
 {
-    return (int)(x + 0.5);
+	if (*angle >= 360)
+		*angle -= 360;
+	if (*angle < 0)
+		*angle += 360;
 }

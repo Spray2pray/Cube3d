@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
+/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:33:33 by mbamatra          #+#    #+#             */
-/*   Updated: 2024/12/13 20:27:43 by louisalah        ###   ########.fr       */
+/*   Updated: 2024/12/14 19:24:25 by asid-ahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,27 +23,27 @@
 
 typedef struct s_vars
 {
-	int		angle;
-	void	*mlx;
-	void	*mlx_win;
-	void    *img;
-    char    *addr;
-    int     bits_per_pixel;
-    int     line_length;
-    int     endian;
-	char	**map;
-	char	*no;
-	char	*so;
-	char	*we;
-	char	*ea;
-	int		map_fd;
-	int		size;
-	char	*map_name;
-	int		floor_color[3];
-	int		ceiling_colors[3];
-	int		map_height;
-	int		player_x;
-	int		player_y;
+	int			angle;
+	void		*mlx;
+	void		*mlx_win;
+	void    	*img;
+    char    	*addr;
+    int     	bits_per_pixel;
+    int     	line_length;
+    int     	endian;
+	char		**map;
+	char		*no;
+	char		*so;
+	char		*we;
+	char		*ea;
+	int			map_fd;
+	int			size;
+	char		*map_name;
+	int			floor_color[3];
+	int			ceiling_colors[3];
+	int			map_height;
+	double		player_x;
+	double		player_y;
 }	t_vars;
 
 
@@ -68,4 +68,5 @@ int		ft_move(int keycode, t_vars *map);
 void	draw_player(t_vars *vars, int x_start, int y_start, int color);
 int		draw_map2d(t_vars *vars);
 int		round_down(float x);
+void	adjust_angle(int *angle);
 #endif

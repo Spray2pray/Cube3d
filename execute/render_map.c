@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   render_map.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
+/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:11:18 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/13 19:45:13 by louisalah        ###   ########.fr       */
+/*   Updated: 2024/12/14 20:15:46 by asid-ahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-void my_put_pixel(t_vars *vars, int x, int y, int color)
+void	my_put_pixel(t_vars *vars, int x, int y, int color)
 {
 	char	*dst;
 
@@ -24,7 +24,6 @@ static void	draw_square(t_vars *vars, int x_start, int y_start, int color)
 {
 	int	x;
 	int	y;
-	// char	*dst;
 
 	y = y_start;
 	while (y + 1 < y_start + vars->size)
@@ -39,17 +38,33 @@ static void	draw_square(t_vars *vars, int x_start, int y_start, int color)
 	}
 }
 
-
 static void	draw_cursor(t_vars *vars, float x_start, float y_start, int color)
 {
-	int	i = 0;
+	int	i;
+	int j;
+	int	angle;
+	int	x;
+	int	y;
 
-	
-	while (i++ < 50)
+	j = -30;
+	angle = vars->angle;
+	x = x_start;
+	y = y_start;
+	while (j <= 30)
 	{
-		my_put_pixel(vars, x_start, y_start, color);
-		x_start += cos((vars->angle * M_PI) / 180);
-		y_start += sin((vars->angle * M_PI) / 180);
+		angle = vars->angle;
+		angle+=j;
+		adjust_angle(&angle);
+		i = 0;
+		x_start = x;
+		y_start = y;
+		while (i++ < 200)
+		{
+			my_put_pixel(vars, x_start, y_start, color);
+			x_start += cos(((angle) * M_PI) / 180);
+			y_start -= sin(((angle) * M_PI) / 180);
+		}
+		j++;
 	}
 }
 
@@ -58,7 +73,6 @@ void	draw_player(t_vars *vars, int x_start, int y_start, int color)
 	const int	size = vars->size / 3;
 	int			x;
 	int			y;
-	// char		*dst;
 
 	y = y_start;
 	while (y + 1 < y_start + size)
@@ -71,7 +85,7 @@ void	draw_player(t_vars *vars, int x_start, int y_start, int color)
 		}
 		y++;
 	}
-	draw_cursor(vars, x_start + size / 2, y_start + size / 2, 0x000000CD);
+	draw_cursor(vars, x_start + size / 2, y_start + size / 2, color);
 }
 
 int	draw_map2d(t_vars *vars)

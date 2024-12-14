@@ -6,7 +6,7 @@
 #    By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/05 16:48:25 by asid-ahm          #+#    #+#              #
-#    Updated: 2024/12/13 13:12:52 by asid-ahm         ###   ########.fr        #
+#    Updated: 2024/12/14 19:24:49 by asid-ahm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = cub3d
 SRCS = cub3d.c ./parsing/all_free.c ./parsing/initialize_vars.c gnl/get_next_line.c \
 		./parsing/parse_colors.c ./parsing/printing_file.c ./parsing/validate_map.c\
 		./parsing/parse_map.c ./parsing/parse_comps.c ./execute/mlx_init.c \
-		./execute/move.c execute/render_map.c
+		./execute/move.c execute/render_map.c execute/math_help.c
 
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
