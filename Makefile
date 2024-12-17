@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+         #
+#    By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/05 16:48:25 by asid-ahm          #+#    #+#              #
-#    Updated: 2024/12/14 19:24:49 by asid-ahm         ###   ########.fr        #
+#    Updated: 2024/12/16 13:13:08 by louisalah        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ MLX_DIR = mlx
 MLX = $(MLX_DIR)/libmlx.a
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3 -I Includes -I $(LIBFT_DIR) -I $(MLX_DIR) -O3
+CFLAGS = -g3 -I Includes -I $(LIBFT_DIR) -I $(MLX_DIR) -O3
 
 OBJS = $(SRCS:.c=.o)
 all: $(NAME)
@@ -35,7 +35,7 @@ $(MLX):
 	make -C mlx
 
 %.o: %.c
-	$(CC) -Wall -Wextra -Werror -Imlx -g3 -c $< -o $@
+	$(CC) -Imlx -g3 -c $< -o $@
 
 $(NAME): $(OBJS) $(LIBFT) $(MLX)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(MLX) -framework OpenGL -framework AppKit -o $(NAME)

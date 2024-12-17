@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 16:17:08 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/14 19:49:02 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/16 12:28:43 by louisalah        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static void	set_player_pos(t_vars *vars, int i, int j)
 		vars->angle = 180;
 	else if (vars->map[j][i] == 'E')
 		vars->angle = 0;
+	vars->map[j][i] = '0';
 }
 
 int	validate_characters(t_vars *vars)
