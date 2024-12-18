@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   move.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
+/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:56:26 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/17 11:28:12 by louisalah        ###   ########.fr       */
+/*   Updated: 2024/12/18 16:55:06 by asid-ahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,27 @@
 // Consolidated movement function
 static void	ft_move_player(t_vars *vars, double angle_offset)
 {
-	int x;
-	int y;
+	float x;
+	float y;
 	int size;
 
 	size = vars->size;
 	// Calculate new player position based on angle and offset
 	x = (vars->player_x + (cos((vars->angle + angle_offset) * M_PI / 180) * size / 10)) / size;
 	y = (vars->player_y) / size;
-
-	// Check if the new position is within the bounds of the map
-	if (vars->map[y][x] != '1' && vars->map[y][x] != ' ')
+	if (x * size >= vars->player_x)
+		x = round(x);
+	if (y * size >= vars->player_y)
+		y = round(y);
+	if (vars->map[(int)y][(int)x] != '1' && vars->map[(int)y][(int)x] != ' ')
 		vars->player_x += (cos((vars->angle + angle_offset) * M_PI / 180) * size / 10);
 	x = (vars->player_x) / size;
 	y = (vars->player_y - (sin((vars->angle + angle_offset) * M_PI / 180) * size / 10)) / size;
-	if (vars->map[y][x] != '1' && vars->map[y][x] != ' ')
+	if (x * size >= vars->player_x)
+		x = round(x);
+	if (y * size >= vars->player_y)
+		y = round(y);
+	if (vars->map[(int)y][(int)x] != '1' && vars->map[(int)y][(int)x] != ' ')
 		vars->player_y -= (sin((vars->angle + angle_offset) * M_PI / 180) * size / 10);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_map.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
+/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:11:18 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/16 13:19:33 by louisalah        ###   ########.fr       */
+/*   Updated: 2024/12/18 17:05:27 by asid-ahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,18 +52,24 @@ int check_dist(float x, float y, t_vars *vars, float angle)
 	return (dist);
 }
 
-// void	draw_3d_line(t_vars *vars, float x, int dist, float angle)
-// {
-// 	float y = 0;
+void	draw_3d_line(t_vars *vars, float x, float dist, float angle)
+{
+	float y = 0;
 
-// 	dist *= cos(((angle - vars->angle) * M_PI) / 180)*1.5;
-// 	y += dist;
-// 	while (y < (1000 - dist))
-// 	{
-// 		my_put_pixel(vars, x, y, 0x0000FF);
-// 		y++;
-// 	}
-// }
+	// printf("1 dist: %f\n", dist);
+	dist *= cos(((angle - vars->angle) * M_PI) / 180)*1.5;
+	// printf("2 dist: %f\n", dist);
+	dist = (vars->size / dist) * ((1000 / 2) / tan((30 * M_PI) / 180));
+	// printf("3 dist: %f\n", dist);
+	y = (1000 / 2) - (dist / 2);
+	if (y < 0)
+		y = 10;
+	while (y < ((1000 / 2) + (dist / 2)) && y < 1000)
+	{
+		my_put_pixel(vars, x, y, 398538);
+		y++;
+	}
+}
 
 static void	draw_cursor(t_vars *vars, float x_start, float y_start, int color)
 {
@@ -77,7 +83,7 @@ static void	draw_cursor(t_vars *vars, float x_start, float y_start, int color)
 	int		k;
 
 	j = -30;
-	k = 0;
+	k = 1000;
 	fov = (60.0 / 1000);
 	angle = vars->angle;
 	x = x_start;
@@ -90,10 +96,11 @@ static void	draw_cursor(t_vars *vars, float x_start, float y_start, int color)
 		n = check_dist(x_start, y_start, vars, angle+j);
 		while (i++ < n)
 		{
-			my_put_pixel(vars, x_start, y_start, color);
+			// my_put_pixel(vars, x_start, y_start, color);
 			x_start += cos(((angle+j) * M_PI) / 180);
 			y_start -= sin(((angle+j) * M_PI) / 180);
 		}
+		draw_3d_line(vars, k--, n,angle+j);
 		j += fov;
 	}
 }
@@ -110,7 +117,7 @@ void	draw_player(t_vars *vars, int x_start, int y_start, int color)
 		x = x_start;
 		while (x + 1 < x_start + size)
 		{
-			my_put_pixel(vars, x, y, color);
+			// my_put_pixel(vars, x, y, color);
 			x++;
 		}
 		y++;
@@ -150,17 +157,17 @@ int	draw_map2d(t_vars *vars)
 	i = -1;
 	ft_memset(vars->addr, 0, vars->line_length * 1000);
 	draw_splited_screen(vars);
-	while (vars->map[++i])
-	{
-		j = -1;
-		while (vars->map[i][++j])
-		{
-			if (vars->map[i][j] == '1')
-				draw_square(vars, (j * vars->size), (i * vars->size), 0xD3D3D3);
-			else if(vars->map[i][j] == '0' || check_for_player(vars->map[i][j]))
-				draw_square(vars, (j * vars->size), (i * vars->size), 0x404040);
-		}
-	}
+	// while (vars->map[++i])
+	// {
+	// 	j = -1;
+	// 	while (vars->map[i][++j])
+	// 	{
+	// 		if (vars->map[i][j] == '1')
+	// 			draw_square(vars, (j * vars->size), (i * vars->size), 0xD3D3D3);
+	// 		else if(vars->map[i][j] == '0' || check_for_player(vars->map[i][j]))
+	// 			draw_square(vars, (j * vars->size), (i * vars->size), 0x404040);
+	// 	}
+	// }
 	draw_player(vars, vars->player_x, vars->player_y, 0x000000CD);
 	mlx_put_image_to_window(vars->mlx, vars->mlx_win, vars->img, 0, 0);
 	return (0);
