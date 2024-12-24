@@ -6,7 +6,7 @@
 /*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 20:25:34 by louisalah         #+#    #+#             */
-/*   Updated: 2024/12/14 19:24:14 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/22 22:00:13 by asid-ahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,4 +18,11 @@ void	adjust_angle(int *angle)
 		*angle -= 360;
 	if (*angle < 0)
 		*angle += 360;
+}
+
+float	ft_abs(float i)
+{
+	if (i < 0.0)
+		return (-1 * i);
+	return (i);
 }

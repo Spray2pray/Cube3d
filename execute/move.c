@@ -6,49 +6,60 @@
 /*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:56:26 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/18 16:55:06 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/24 21:31:40 by asid-ahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-// Consolidated movement function
 static void	ft_move_player(t_vars *vars, double angle_offset)
 {
-	float x;
-	float y;
-	int size;
+    float x, y;
+    int size;
+    float collision_radius;
 
-	size = vars->size;
-	// Calculate new player position based on angle and offset
-	x = (vars->player_x + (cos((vars->angle + angle_offset) * M_PI / 180) * size / 10)) / size;
-	y = (vars->player_y) / size;
-	if (x * size >= vars->player_x)
-		x = round(x);
-	if (y * size >= vars->player_y)
-		y = round(y);
-	if (vars->map[(int)y][(int)x] != '1' && vars->map[(int)y][(int)x] != ' ')
-		vars->player_x += (cos((vars->angle + angle_offset) * M_PI / 180) * size / 10);
-	x = (vars->player_x) / size;
-	y = (vars->player_y - (sin((vars->angle + angle_offset) * M_PI / 180) * size / 10)) / size;
-	if (x * size >= vars->player_x)
-		x = round(x);
-	if (y * size >= vars->player_y)
-		y = round(y);
-	if (vars->map[(int)y][(int)x] != '1' && vars->map[(int)y][(int)x] != ' ')
-		vars->player_y -= (sin((vars->angle + angle_offset) * M_PI / 180) * size / 10);
+    size = vars->size;
+    collision_radius = size / 5; 
+
+    
+    x = vars->player_x + cos((vars->angle + angle_offset) * M_PI / 180) * size / 10;
+    y = vars->player_y;
+
+    
+    if (vars->map[(int)((y - collision_radius) / size)][(int)((x - collision_radius) / size)] != '1' &&
+        vars->map[(int)((y + collision_radius) / size)][(int)((x - collision_radius) / size)] != '1' &&
+        vars->map[(int)((y - collision_radius) / size)][(int)((x + collision_radius) / size)] != '1' &&
+        vars->map[(int)((y + collision_radius) / size)][(int)((x + collision_radius) / size)] != '1')
+    {
+        vars->player_x = x;
+    }
+
+    
+    x = vars->player_x;
+    y = vars->player_y - sin((vars->angle + angle_offset) * M_PI / 180) * size / 10;
+
+    
+    if (vars->map[(int)((y - collision_radius) / size)][(int)((x - collision_radius) / size)] != '1' &&
+        vars->map[(int)((y + collision_radius) / size)][(int)((x - collision_radius) / size)] != '1' &&
+        vars->map[(int)((y - collision_radius) / size)][(int)((x + collision_radius) / size)] != '1' &&
+        vars->map[(int)((y + collision_radius) / size)][(int)((x + collision_radius) / size)] != '1')
+    {
+        vars->player_y = y;
+    }
 }
 
-// New function to handle movement direction
+
+
+
 static void	ft_decide_direction(t_vars *vars, int direction)
 {
-	if (direction == 1) // Up
+	if (direction == 1) 
 		ft_move_player(vars, 0);
-	else if (direction == 2) // Down
+	else if (direction == 2) 
 		ft_move_player(vars, 180);
-	else if (direction == 3) // Left
+	else if (direction == 3) 
 		ft_move_player(vars, 90);
-	else if (direction == 4) // Right
+	else if (direction == 4) 
 		ft_move_player(vars, 270);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
+/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:36:02 by mbamatra          #+#    #+#             */
-/*   Updated: 2024/12/16 13:22:42 by louisalah        ###   ########.fr       */
+/*   Updated: 2024/12/24 23:27:06 by asid-ahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,12 @@ int	main(int argc, char **argv)
 		return (free_all(&vars), 1);
 	print_comps(&vars);
 	print_map(&vars);
+	vars.north = (t_img *)malloc(sizeof(t_img));
+	vars.north->img = mlx_xpm_file_to_image(vars.mlx, vars.no,
+			&(vars.north->width), &(vars.north->height));
+	vars.north->addr = mlx_get_data_addr(vars.north->img,
+			&vars.north->bits_per_pixel, &vars.north->line_length,
+			&vars.north->endian);
 	mlx_loop_hook(vars.mlx, draw_map2d, &vars);
 	mlx_hook(vars.mlx_win, 2, 0, ft_move, &vars);
 	mlx_hook(vars.mlx_win, 17, 0, ft_quit, &vars);

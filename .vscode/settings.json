@@ -14,6 +14,9 @@
 		"vector": "c",
 		"iterator": "c",
 		"complex": "c",
-		"cub3d.h": "c"
+		"cub3d.h": "c",
+		"chrono": "c",
+		"__locale": "c",
+		"__string": "c"
 	}
 }
