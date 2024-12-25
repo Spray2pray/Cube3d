@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_map.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:11:18 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/24 23:28:15 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/25 23:54:31 by louisalah        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,31 +33,6 @@ int	my_mlx_pixel_get(t_img *img, int x, int y)
 	return (color);
 }
 
-// int w_get_pixel(t_vars *vars, int b_x, int b_y)
-// {
-// 	float	x;
-// 	float	y;
-// 	float	y_step;
-// 	int		color;
-
-// 	y = 0;
-// 	color = 0;
-// 	y_step = (float)vars->north->height / data->line_height;
-// 	if (is_vert)
-// 		x = ((float)((int)data->vy % data->map->pixel)
-// 				/ (data->map->pixel)) * img->width;
-// 	else
-// 		x = ((float)((int)data->hx % data->map->pixel)
-// 				/ (data->map->pixel)) * img->width;
-// 	while (data->start < data->end)
-// 	{
-// 		color = my_mlx_pixel_get(img, x, y);
-// 		my_mlx_pixel_put(data->screen, data->x_screen, data->start++, color);
-// 		y += y_step;
-// 	}
-// }
-
-
 static void	draw_square(t_vars *vars, int x_start, int y_start, int color)
 {
 	int	x;
@@ -75,21 +50,6 @@ static void	draw_square(t_vars *vars, int x_start, int y_start, int color)
 		y++;
 	}
 }
-
-
-// int check_dist(float x, float y, t_vars *vars, float angle)
-// {
-// 	int dist = 0;
-// 	int size = vars->size;
-
-// 	while (vars->map[(int)(y / size)][(int)(x / size)] == '0')
-// 	{
-// 		x += cos((angle * M_PI) / 180);
-// 		y -= sin((angle * M_PI) / 180);
-// 		dist++;
-// 	}
-// 	return (dist);
-// }
 
 int check_dist(t_vars *vars, float angle)
 {
@@ -122,36 +82,32 @@ int check_dist(t_vars *vars, float angle)
     return dist;
 }
 
-void	draw_3d_line(t_vars *vars, float x, float dist, float angle, int color)
+void	draw_3d_line(t_vars *vars, float x, float dist, float angle, t_img *txt_img)
 {
 	int		y;
+	int		color;
 	float	t_x;
 	float	t_y;
 	float	y_step;
-	float line_h;
-	// printf("1 dist: %f\n", dist);
+	float	line_h;
+
 	dist *= cos(((angle - vars->angle) * M_PI) / 180)*1.5;
-	// printf("2 dist: %f\n", dist);
-
 	t_y = 0;
-	
 	line_h = (vars->size / dist) * ((1000 / 2) / tan((30 * M_PI) / 180));
-	y_step = (float)vars->north->height / line_h;
+	y_step = (float)txt_img->height / line_h;
 	dist = (vars->size / dist) * ((1000 / 2) / tan((30 * M_PI) / 180));
-	// printf("3 dist: %f\n", dist);
-
 	if (vars->hit_type == 'V')
 		t_x = ((float)((int)vars->r_y % vars->size)
-				/ (vars->size)) * vars->north->width;
+				/ (vars->size)) * txt_img->width;
 	else
 		t_x = ((float)((int)vars->r_x % vars->size)
-				/ (vars->size)) * vars->north->width;
+				/ (vars->size)) * txt_img->width;
 	y = (1000 / 2) - (dist / 2);
 	if (y < 0)
 		y = 0;
 	while (y < ((1000 / 2) + (dist / 2)) && y < 1000)
 	{
-		color = my_mlx_pixel_get(vars->north, t_x, t_y);
+		color = my_mlx_pixel_get(txt_img, t_x, t_y);
 		my_put_pixel(vars, x, y, color);
 		t_y += y_step;
 		y++;
@@ -160,38 +116,42 @@ void	draw_3d_line(t_vars *vars, float x, float dist, float angle, int color)
 
 static void	draw_cursor(t_vars *vars, int color)
 {
-	int		i;
 	float	j;
 	float	fov;
 	float	angle;
-	int		x;
-	int		y;
 	int		n;
 	int		k;
+	t_img	*txt_img;
 
 	j = -30;
 	k = 1000;
 	fov = (60.0 / 1000);
 	angle = vars->angle;
+	vars->angle = adjust_float_angle(vars->angle);
 	while (j <= 30)
 	{
-		i = 0;
 		n = check_dist(vars, angle+j);
-		draw_3d_line(vars, k--, n,angle+j, color);
+		vars->ray_angle = adjust_float_angle(angle + j);
+		if (vars->hit_type == 'V')
+		{
+			if (vars->ray_angle >= 90 && vars->ray_angle <= 270)
+				txt_img = vars->west;
+			else
+				txt_img = vars->east;
+		}
+		else
+		{
+			if (vars->ray_angle >= 0 && vars->ray_angle <= 180)
+				txt_img = vars->north;
+			else
+				txt_img = vars->south;
+		}
+		draw_3d_line(vars, k--, n,angle+j, txt_img);
 		vars->r_x = vars->player_x + (vars->size / 6);
 		vars->r_y = vars->player_y + (vars->size / 6);
-		if (vars->hit_type == 'V')
-			color = 0x007700;
-		else
-			color = 0x000077;
-		// while (i++ < n)
-		// {
-		// 	my_put_pixel(vars, vars->r_x, vars->r_y, color);
-		// 	vars->r_x += cos(((angle+j) * M_PI) / 180);
-		// 	vars->r_y -= sin(((angle+j) * M_PI) / 180);
-		// }
 		j += fov;
 	}
+	// exit (1);
 }
 
 void	draw_player(t_vars *vars, int color)
@@ -235,6 +195,7 @@ int	draw_map2d(t_vars *vars)
 	int	j;
 
 	i = -1;
+	ft_handle_keys(vars);
 	ft_memset(vars->addr, 0, vars->line_length * 1000);
 	draw_splited_screen(vars);
 	// while (vars->map[++i])

@@ -3,34 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   initialize_vars.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:10:42 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/24 23:27:26 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/25 15:41:34 by louisalah        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-void	init_flags(int *flag)
+static void	init_map_vars(t_vars *vars, char **argv)
 {
-	flag[0] = 0;
-	flag[1] = 0;
-	flag[2] = 0;
-	flag[3] = 0;
-	flag[4] = 0;
-	flag[5] = 0;
-}
-
-void	initialize_vars(t_vars *vars, char **argv)
-{
-	vars->size = 500;
-	vars->angle = -1;
-	vars->map = NULL;
-	vars->no = NULL;
-	vars->so = NULL;
-	vars->we = NULL;
-	vars->ea = NULL;
 	vars->map_fd = -1;
 	vars->player_x = -1;
 	vars->player_y = -1;
@@ -42,4 +25,35 @@ void	initialize_vars(t_vars *vars, char **argv)
 	vars->ceiling_colors[1] = -1;
 	vars->ceiling_colors[2] = -1;
 	vars->map_name = argv[1];
+	vars->map = NULL;
+	vars->no = NULL;
+	vars->so = NULL;
+	vars->we = NULL;
+	vars->ea = NULL;
+}
+void	initialize_vars(t_vars *vars, char **argv)
+{
+	init_map_vars(vars, argv);
+	vars->size = 500;
+	vars->angle = -1;
+	vars->north = NULL;
+	vars->south = NULL;
+	vars->west = NULL;
+	vars->east = NULL;
+	vars->key_a = 0;
+	vars->key_d = 0;
+	vars->key_s = 0;
+	vars->key_w = 0;
+	vars->key_left = 0;
+	vars->key_right = 0;
+}
+
+void	init_flags(int *flag)
+{
+	flag[0] = 0;
+	flag[1] = 0;
+	flag[2] = 0;
+	flag[3] = 0;
+	flag[4] = 0;
+	flag[5] = 0;
 }

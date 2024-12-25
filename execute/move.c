@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   move.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:56:26 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/24 21:31:40 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/25 15:51:33 by louisalah        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	ft_move_player(t_vars *vars, double angle_offset)
     collision_radius = size / 5; 
 
     
-    x = vars->player_x + cos((vars->angle + angle_offset) * M_PI / 180) * size / 10;
+    x = vars->player_x + cos((vars->angle + angle_offset) * M_PI / 180) * size / 5; /// make it faster to look smooth
     y = vars->player_y;
 
     
@@ -36,7 +36,7 @@ static void	ft_move_player(t_vars *vars, double angle_offset)
 
     
     x = vars->player_x;
-    y = vars->player_y - sin((vars->angle + angle_offset) * M_PI / 180) * size / 10;
+    y = vars->player_y - sin((vars->angle + angle_offset) * M_PI / 180) * size / 5; /// make it faster to look smooth
 
     
     if (vars->map[(int)((y - collision_radius) / size)][(int)((x - collision_radius) / size)] != '1' &&
@@ -47,9 +47,6 @@ static void	ft_move_player(t_vars *vars, double angle_offset)
         vars->player_y = y;
     }
 }
-
-
-
 
 static void	ft_decide_direction(t_vars *vars, int direction)
 {
@@ -63,29 +60,78 @@ static void	ft_decide_direction(t_vars *vars, int direction)
 		ft_move_player(vars, 270);
 }
 
-int	ft_move(int keycode, t_vars *vars)
+int	ft_key_press(int keycode, t_vars *vars)
 {
-	if (keycode == 53)
-		ft_quit(vars);
-	if (keycode == 13)
-		ft_decide_direction(vars, 1); // Move up
-	else if (keycode == 1)
-		ft_decide_direction(vars, 2); // Move down
-	else if (keycode == 0)
-		ft_decide_direction(vars, 3); // Move left
-	else if (keycode == 2)
-		ft_decide_direction(vars, 4); // Move right
-	else if (keycode == 124)
+
+    if (keycode == W)
+        vars->key_w = 1;
+    else if (keycode == S)
+        vars->key_s = 1;
+    else if (keycode == A)
+        vars->key_a = 1;
+    else if (keycode == D)
+        vars->key_d = 1;
+    else if (keycode == RIGHT)
 	{
-		vars->angle -= 5;
-		while (vars->angle >= 360)
-			vars->angle -= 360;
+
+        vars->key_right = 1;
 	}
-	else if (keycode == 123)
+    else if (keycode == LEFT)
 	{
-		vars->angle += 5;
-		while (vars->angle < 0)
-			vars->angle += 360;
+
+        vars->key_left = 1;
+	}
+    else if (keycode == ESC)
+        ft_quit(vars);
+	return (0);
+}
+
+int	ft_key_release(int keycode, t_vars *vars)
+{
+
+    if (keycode == W)
+        vars->key_w = 0;
+    else if (keycode == S)
+        vars->key_s = 0;
+    else if (keycode == A)
+        vars->key_a = 0;
+    else if (keycode == D)
+        vars->key_d = 0;
+    else if (keycode == RIGHT)
+	{
+
+        vars->key_right = 0;
+	}
+    else if (keycode == LEFT)
+	{
+
+        vars->key_left = 0;
 	}
 	return (0);
 }
+
+int ft_handle_keys(t_vars *vars)
+{
+    if (vars->key_w)
+        ft_decide_direction(vars, 1); // Move up
+    if (vars->key_s)
+        ft_decide_direction(vars, 2); // Move down
+    if (vars->key_a)
+        ft_decide_direction(vars, 3); // Move left
+    if (vars->key_d)
+        ft_decide_direction(vars, 4); // Move right
+    if (vars->key_right)
+    {
+        vars->angle -= 10;
+        while (vars->angle >= 360)
+            vars->angle -= 360;
+    }
+    if (vars->key_left)
+    {
+        vars->angle += 10;
+        while (vars->angle < 0)
+            vars->angle += 360;
+    }
+    return (0);
+}
+

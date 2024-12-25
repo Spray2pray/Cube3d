@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:33:33 by mbamatra          #+#    #+#             */
-/*   Updated: 2024/12/24 22:41:19 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/25 20:19:35 by louisalah        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,17 @@
 # include "../gnl/get_next_line.h"
 # include "../libft/libft.h"
 # include "../mlx/mlx.h"
+
+enum keys
+{
+	W = 13,
+	S = 1,
+	A = 0,
+	D = 2,
+	RIGHT = 124,
+	LEFT = 123,
+	ESC = 53
+};
 
 typedef struct s_img
 {
@@ -36,6 +47,16 @@ typedef struct s_img
 typedef struct s_vars
 {
 	t_img		*north;
+	t_img		*south;
+	t_img		*west;
+	t_img		*east;
+	float		ray_angle;
+	int			key_w;
+	int			key_s;
+	int			key_a;
+	int			key_d;
+	int			key_left;
+	int			key_right;
 	int			angle;
 	void		*mlx;
 	void		*mlx_win;
@@ -80,11 +101,13 @@ int		read_map(t_vars *vars, char *file);
 
 int		init_mlx(t_vars *vars);
 int		ft_quit(t_vars *map);
-int		ft_move(int keycode, t_vars *vars);
 void	draw_player(t_vars *vars, int color);
 int		draw_map2d(t_vars *vars);
-int		round_down(float x);
 void	adjust_angle(int *angle);
 float	ft_abs(float i);
 int		my_mlx_pixel_get(t_img *img, int x, int y);
+int		ft_key_press(int keycode, t_vars *vars);
+int		ft_key_release(int keycode, t_vars *vars);
+int		ft_handle_keys(t_vars *vars);
+float	adjust_float_angle(float angle);
 #endif
