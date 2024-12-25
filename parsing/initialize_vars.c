@@ -6,7 +6,7 @@
 /*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:10:42 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/25 15:41:34 by louisalah        ###   ########.fr       */
+/*   Updated: 2024/12/26 01:17:41 by louisalah        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	init_map_vars(t_vars *vars, char **argv)
 void	initialize_vars(t_vars *vars, char **argv)
 {
 	init_map_vars(vars, argv);
-	vars->size = 500;
+	vars->size = 150;
 	vars->angle = -1;
 	vars->north = NULL;
 	vars->south = NULL;

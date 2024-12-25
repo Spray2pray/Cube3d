@@ -6,13 +6,13 @@
 /*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:56:26 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/25 15:51:33 by louisalah        ###   ########.fr       */
+/*   Updated: 2024/12/26 01:20:59 by louisalah        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-static void	ft_move_player(t_vars *vars, double angle_offset)
+static void	ft_move_player(t_vars *vars, float angle_offset)
 {
     float x, y;
     int size;
@@ -22,7 +22,7 @@ static void	ft_move_player(t_vars *vars, double angle_offset)
     collision_radius = size / 5; 
 
     
-    x = vars->player_x + cos((vars->angle + angle_offset) * M_PI / 180) * size / 5; /// make it faster to look smooth
+    x = vars->player_x + cos((vars->angle + angle_offset) * M_PI / 180) * size / 10; /// make it faster to look smooth
     y = vars->player_y;
 
     
@@ -132,6 +132,7 @@ int ft_handle_keys(t_vars *vars)
         while (vars->angle < 0)
             vars->angle += 360;
     }
+	render(vars);
     return (0);
 }
 

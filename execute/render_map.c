@@ -6,7 +6,7 @@
 /*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:11:18 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/25 23:54:31 by louisalah        ###   ########.fr       */
+/*   Updated: 2024/12/26 01:16:59 by louisalah        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,29 +58,39 @@ int check_dist(t_vars *vars, float angle)
     float x_step = cos((angle * M_PI) / 180);
     float y_step = -sin((angle * M_PI) / 180);
     float next_x, next_y;
+    int current_cell_x = (int)(vars->r_x / size);
+    int current_cell_y = (int)(vars->r_y / size);
 
-    while (vars->map[(int)(vars->r_y / size)][(int)(vars->r_x / size)] == '0')
+    while (vars->map[current_cell_y][current_cell_x] == '0')
     {
         next_x = vars->r_x + x_step;
         next_y = vars->r_y + y_step;
-		if ((int)(next_y / size) != (int)(vars->r_y / size) && (int)(next_x / size) != (int)(vars->r_x / size))
-		{
-			if (ft_abs((next_y / size) - (vars->r_y / size)) > ft_abs((next_x / size) - (vars->r_x / size)))
-				vars->hit_type = 'H';
-			else
-				vars->hit_type = 'V';
-		}
-		else if ((int)(next_y / size) != (int)(vars->r_y / size))
-			vars->hit_type = 'H';
-		else if ((int)(next_x / size) != (int)(vars->r_x / size))
-			vars->hit_type = 'V';		
+        int new_cell_x = (int)(next_x / size);
+        int new_cell_y = (int)(next_y / size);
+
+        if (new_cell_x != current_cell_x || new_cell_y != current_cell_y)
+        {
+            if (new_cell_y != current_cell_y && new_cell_x != current_cell_x)
+            {
+                if (ft_abs(new_cell_y - current_cell_y) > ft_abs(new_cell_x - current_cell_x))
+                    vars->hit_type = 'H';
+                else
+                    vars->hit_type = 'V';
+            }
+            else if (new_cell_y != current_cell_y)
+                vars->hit_type = 'H';
+            else if (new_cell_x != current_cell_x)
+                vars->hit_type = 'V';
+            current_cell_x = new_cell_x;
+            current_cell_y = new_cell_y;
+        }
         vars->r_x = next_x;
         vars->r_y = next_y;
         dist++;
     }
-
     return dist;
 }
+
 
 void	draw_3d_line(t_vars *vars, float x, float dist, float angle, t_img *txt_img)
 {
@@ -88,6 +98,7 @@ void	draw_3d_line(t_vars *vars, float x, float dist, float angle, t_img *txt_img
 	int		color;
 	float	t_x;
 	float	t_y;
+	float	max;
 	float	y_step;
 	float	line_h;
 
@@ -105,7 +116,8 @@ void	draw_3d_line(t_vars *vars, float x, float dist, float angle, t_img *txt_img
 	y = (1000 / 2) - (dist / 2);
 	if (y < 0)
 		y = 0;
-	while (y < ((1000 / 2) + (dist / 2)) && y < 1000)
+	max = (1000 / 2) + (dist / 2);
+	while (y < max && y < 1000)
 	{
 		color = my_mlx_pixel_get(txt_img, t_x, t_y);
 		my_put_pixel(vars, x, y, color);
@@ -151,18 +163,6 @@ static void	draw_cursor(t_vars *vars, int color)
 		vars->r_y = vars->player_y + (vars->size / 6);
 		j += fov;
 	}
-	// exit (1);
-}
-
-void	draw_player(t_vars *vars, int color)
-{
-	const int	size = vars->size / 3;
-	int			x;
-	int			y;
-
-	y = 0;
-	x = 0;
-	draw_cursor(vars, 16711680);
 }
 
 int rgb_to_hex(int r, int g, int b)
@@ -170,46 +170,39 @@ int rgb_to_hex(int r, int g, int b)
 	return (r << 16 | g << 8 | b);
 }
 
-void	draw_splited_screen(t_vars *vars)
+static void	draw_splited_screen(t_vars *vars)
 {
 	int	i;
 	int	j;
+	int c;
+	int f;
 
 	i = -1;
+	c = rgb_to_hex(vars->ceiling_colors[0], vars->ceiling_colors[1], vars->ceiling_colors[2]);
+	f = rgb_to_hex(vars->floor_color[0], vars->floor_color[1], vars->floor_color[2]);
 	while (++i < 1000)
 	{
 		j = -1;
 		while (++j < 1000)
 		{
 			if (i < 500)
-				my_put_pixel(vars, j, i, rgb_to_hex(vars->ceiling_colors[0], vars->ceiling_colors[1], vars->ceiling_colors[2]));
+				my_put_pixel(vars, j, i, c);
 			else
-				my_put_pixel(vars, j, i, rgb_to_hex(vars->floor_color[0], vars->floor_color[1], vars->floor_color[2]));
+				my_put_pixel(vars, j, i, f);
 		}
 	}
 }
 
-int	draw_map2d(t_vars *vars)
+void	render(t_vars *vars)
 {
-	int	i;
-	int	j;
-
-	i = -1;
-	ft_handle_keys(vars);
 	ft_memset(vars->addr, 0, vars->line_length * 1000);
 	draw_splited_screen(vars);
-	// while (vars->map[++i])
-	// {
-	// 	j = -1;
-	// 	while (vars->map[i][++j])
-	// 	{
-	// 		if (vars->map[i][j] == '1')
-	// 			draw_square(vars, (j * vars->size), (i * vars->size), 0xD3D3D3);
-	// 		else if(vars->map[i][j] == '0' || check_for_player(vars->map[i][j]))
-	// 			draw_square(vars, (j * vars->size), (i * vars->size), 0x404040);
-	// 	}
-	// }
-	draw_player(vars, 0x000000CD);
+	draw_cursor(vars, 16711680);
 	mlx_put_image_to_window(vars->mlx, vars->mlx_win, vars->img, 0, 0);
+}
+
+int	draw_map2d(t_vars *vars)
+{
+	ft_handle_keys(vars);
 	return (0);
 }
