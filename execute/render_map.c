@@ -6,7 +6,7 @@
 /*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:11:18 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/26 01:16:59 by louisalah        ###   ########.fr       */
+/*   Updated: 2024/12/27 14:20:34 by louisalah        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int check_dist(t_vars *vars, float angle)
                 else
                     vars->hit_type = 'V';
             }
-            else if (new_cell_y != current_cell_y)
+            if (new_cell_y != current_cell_y)
                 vars->hit_type = 'H';
             else if (new_cell_x != current_cell_x)
                 vars->hit_type = 'V';
@@ -100,13 +100,11 @@ void	draw_3d_line(t_vars *vars, float x, float dist, float angle, t_img *txt_img
 	float	t_y;
 	float	max;
 	float	y_step;
-	float	line_h;
 
 	dist *= cos(((angle - vars->angle) * M_PI) / 180)*1.5;
-	t_y = 0;
-	line_h = (vars->size / dist) * ((1000 / 2) / tan((30 * M_PI) / 180));
-	y_step = (float)txt_img->height / line_h;
 	dist = (vars->size / dist) * ((1000 / 2) / tan((30 * M_PI) / 180));
+	t_y = 0;
+	y_step = (float)txt_img->height / dist;
 	if (vars->hit_type == 'V')
 		t_x = ((float)((int)vars->r_y % vars->size)
 				/ (vars->size)) * txt_img->width;
@@ -201,7 +199,7 @@ void	render(t_vars *vars)
 	mlx_put_image_to_window(vars->mlx, vars->mlx_win, vars->img, 0, 0);
 }
 
-int	draw_map2d(t_vars *vars)
+int	draw(t_vars *vars)
 {
 	ft_handle_keys(vars);
 	return (0);

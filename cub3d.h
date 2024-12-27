@@ -6,7 +6,7 @@
 /*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:33:33 by mbamatra          #+#    #+#             */
-/*   Updated: 2024/12/26 01:25:26 by louisalah        ###   ########.fr       */
+/*   Updated: 2024/12/27 14:11:53 by louisalah        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int		read_map(t_vars *vars, char *file);
 
 int		init_mlx(t_vars *vars);
 int		ft_quit(t_vars *map);
-int		draw_map2d(t_vars *vars);
+int		draw(t_vars *vars);
 float	ft_abs(float i);
 int		my_mlx_pixel_get(t_img *img, int x, int y);
 int		ft_key_press(int keycode, t_vars *vars);

@@ -6,7 +6,7 @@
 /*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:56:26 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/26 01:20:59 by louisalah        ###   ########.fr       */
+/*   Updated: 2024/12/27 14:34:35 by louisalah        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	ft_move_player(t_vars *vars, float angle_offset)
     collision_radius = size / 5; 
 
     
-    x = vars->player_x + cos((vars->angle + angle_offset) * M_PI / 180) * size / 10; /// make it faster to look smooth
+    x = vars->player_x + cos((vars->angle + angle_offset) * M_PI / 180) * size / 5;
     y = vars->player_y;
 
     
@@ -36,7 +36,7 @@ static void	ft_move_player(t_vars *vars, float angle_offset)
 
     
     x = vars->player_x;
-    y = vars->player_y - sin((vars->angle + angle_offset) * M_PI / 180) * size / 5; /// make it faster to look smooth
+    y = vars->player_y - sin((vars->angle + angle_offset) * M_PI / 180) * size / 5;
 
     
     if (vars->map[(int)((y - collision_radius) / size)][(int)((x - collision_radius) / size)] != '1' &&
@@ -113,13 +113,13 @@ int	ft_key_release(int keycode, t_vars *vars)
 int ft_handle_keys(t_vars *vars)
 {
     if (vars->key_w)
-        ft_decide_direction(vars, 1); // Move up
+        ft_decide_direction(vars, 1);
     if (vars->key_s)
-        ft_decide_direction(vars, 2); // Move down
+        ft_decide_direction(vars, 2);
     if (vars->key_a)
-        ft_decide_direction(vars, 3); // Move left
+        ft_decide_direction(vars, 3);
     if (vars->key_d)
-        ft_decide_direction(vars, 4); // Move right
+        ft_decide_direction(vars, 4);
     if (vars->key_right)
     {
         vars->angle -= 10;
