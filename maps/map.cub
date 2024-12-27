@@ -1,0 +1,13 @@
+SO ./texture/wall.xpm
+NO ./texture/eagle.xpm
+EA ./texture/wall1.xpm
+C    125 ,125 ,125
+F 50,50,50
+WE ./texture/wall2.xpm
+
+   111111
+      1101
+     100N1  
+    10001  
+   10001  
+   11111

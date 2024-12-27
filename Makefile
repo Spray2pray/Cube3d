@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+         #
+#    By: mbamatra <mbamatra@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/05 16:48:25 by asid-ahm          #+#    #+#              #
-#    Updated: 2024/12/27 19:28:39 by asid-ahm         ###   ########.fr        #
+#    Updated: 2024/12/27 21:29:09 by mbamatra         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,8 +26,7 @@ MLX_DIR = mlx
 MLX = $(MLX_DIR)/libmlx.a
 
 CC = cc
-# CFLAGS = -g3 -I Includes -I -fsanitize=address $(LIBFT_DIR) -I $(MLX_DIR) -O3
-CFLAGS = -g3 -I Includes -I $(LIBFT_DIR) -I $(MLX_DIR) -fsanitize=address
+CFLAGS = -g3 -I Includes -I $(LIBFT_DIR) -I $(MLX_DIR) -Wall -Wextra -Werror
 
 OBJS = $(SRCS:.c=.o)
 all: $(NAME)

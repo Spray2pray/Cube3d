@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbamatra <mbamatra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 16:17:08 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/27 19:30:51 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/27 21:23:38 by mbamatra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@ static void	set_player_pos(t_vars *vars, int i, int j)
 {
 	vars->player_x = j * vars->size + vars->size / 3;
 	vars->player_y = i * vars->size + vars->size / 3;
-	if (vars->map[j][i] == 'N')
+	if (vars->map[i][j] == 'N')
 		vars->angle = 90;
-	else if (vars->map[j][i] == 'S')
+	else if (vars->map[i][j] == 'S')
 		vars->angle = 270;
-	else if (vars->map[j][i] == 'W')
+	else if (vars->map[i][j] == 'W')
 		vars->angle = 180;
-	else if (vars->map[j][i] == 'E')
+	else if (vars->map[i][j] == 'E')
 		vars->angle = 0;
-	vars->map[j][i] = '0';
+	vars->map[i][j] = '0';
 }
 
 int	validate_characters(t_vars *vars)
@@ -82,7 +82,7 @@ int	check_if_empty(t_vars *vars, char *line, int fd)
 	return (0);
 }
 
-int	filling_map(t_vars *vars, char *line, int fd, int i)
+int	fill(t_vars *vars, char *line, int fd, int i)
 {
 	check_if_empty(vars, line, fd);
 	fd = open(vars->map_name, O_RDONLY);

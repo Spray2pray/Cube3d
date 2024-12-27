@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialize_vars.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbamatra <mbamatra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:10:42 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/27 17:56:21 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/27 21:28:21 by mbamatra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	init_map_vars(t_vars *vars, char **argv)
 void	initialize_vars(t_vars *vars, char **argv)
 {
 	init_map_vars(vars, argv);
-	vars->size = 150;
+	vars->size = 200;
 	vars->angle = -1;
 	vars->north = NULL;
 	vars->south = NULL;
@@ -49,12 +49,25 @@ void	initialize_vars(t_vars *vars, char **argv)
 	vars->key_right = 0;
 }
 
-void	init_flags(int *flag)
+void	init_flags(int *flag, t_vars *vars, char *file, int *fd)
 {
+	vars->map_fd = open(file, O_RDONLY);
+	*fd = vars->map_fd;
+	if (fd < 0)
+		(write(2, "Failed to open file\n", 20), exit(1));
 	flag[0] = 0;
 	flag[1] = 0;
 	flag[2] = 0;
 	flag[3] = 0;
 	flag[4] = 0;
 	flag[5] = 0;
+	flag[6] = 0;
+}
+
+int	check_if_flag(int *flag)
+{
+	if ((flag[0] != 1 || flag[1] != 1 || flag[2] != 1 || flag[3] != 1
+			|| flag[4] != 1 || flag[5] != 1 || flag[6] != 1))
+		return (1);
+	return (0);
 }

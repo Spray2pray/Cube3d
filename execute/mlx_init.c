@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbamatra <mbamatra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:29:51 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/27 17:27:33 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/27 20:46:40 by mbamatra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,15 @@ int	init_mlx(t_vars *data)
 {
 	data->mlx = mlx_init();
 	if (!data->mlx)
-		return ((void)printf("failed to init mlx"), 1);
+		return ((void)printf("Error\nFailed to init mlx\n"), 1);
 	if (get_textures(data))
-		return ((void)printf("failed to get textures"), 1);
+		return ((void)printf("Error\nFailed to get textures\n"), 1);
 	data->mlx_win = mlx_new_window(data->mlx, 1080, 1080, "cub3d");
 	if (!data->mlx_win)
-		return ((void)printf("failed to create window"), 1);
+		return ((void)printf("Error\nFailed to create window\n"), 1);
 	data->img = mlx_new_image(data->mlx, 1080, 1080);
 	if (!data->img)
-		return ((void)printf("failed to create image"), 1);
+		return ((void)printf("Error\nFailed to create image\n"), 1);
 	data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel,
 			&data->line_length, &data->endian);
 	return (0);

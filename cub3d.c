@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbamatra <mbamatra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:36:02 by mbamatra          #+#    #+#             */
-/*   Updated: 2024/12/27 18:41:43 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/27 20:18:38 by mbamatra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ int	all_parsing(t_vars *vars)
 {
 	int	i;
 
-	i = read_map(vars, vars->map_name);
+	i = read_map(vars, vars->map_name, NULL, NULL);
 	if (i == 1)
-		return (write(2, "Error\nError With The Component\n", 31));
+		return (write(2, "Error\nInvalid Map\n", 18));
 	else if (i == 2)
 		return (write(2, "Error\nError With The Map\n", 25));
 	else if (i == 3)
@@ -40,8 +40,6 @@ int	all_parsing(t_vars *vars)
 		return (write(2, "Error\nError With The Ceiling Setting\n", 37));
 	else if (i == 6)
 		return (write(2, "Error\nFile Shouldn't Start With The Map\n", 40));
-	else if (i == 7)
-		return (write(2, "Error\nInvalid Map\n", 18));
 	if (validate(vars))
 		return (1);
 	i = validate_characters(vars);
