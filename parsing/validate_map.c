@@ -6,7 +6,7 @@
 /*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 15:56:02 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/13 13:02:51 by asid-ahm         ###   ########.fr       */
+/*   Updated: 2024/12/27 19:15:54 by asid-ahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ static int	surrounded_by_walls(t_vars *vars)
 		j = -1;
 		while (++j < (int)ft_strlen(vars->map[i]))
 		{
-			if ((i == 0 || i == vars->map_height - 1)
-				&& (vars->map[i][j] != '1' && vars->map[i][j] != ' '))
+			if ((i == 0 || i == vars->map_height - 1) && (vars->map[i][j] != '1'
+				&& vars->map[i][j] != ' '))
 				return (1);
 			else if ((j == 0 || j == (int)ft_strlen(vars->map[i]) - 1)
 				&& (vars->map[i][j] != '1' && vars->map[i][j] != ' '))
@@ -52,9 +52,9 @@ static int	validate_zero(t_vars *vars)
 				if (j >= (int)ft_strlen(vars->map[i + 1])
 					|| j >= (int)ft_strlen(vars->map[i - 1]))
 					return (1);
-				else if (vars->map[i][j + 1] == ' '
-				|| vars->map[i][j - 1] == ' '
-				|| (vars->map[i + 1][j] == ' ' || vars->map[i - 1][j] == ' '))
+				else if (vars->map[i][j + 1] == ' ' || vars->map[i][j
+					- 1] == ' ' || (vars->map[i + 1][j] == ' ' || vars->map[i
+						- 1][j] == ' '))
 					return (1);
 			}
 		}

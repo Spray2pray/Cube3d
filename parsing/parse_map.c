@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
+/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 16:17:08 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/16 12:28:43 by louisalah        ###   ########.fr       */
+/*   Updated: 2024/12/27 19:30:51 by asid-ahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static void	set_player_pos(t_vars *vars, int i, int j)
 {
-	vars->player_x = j * vars->size + vars->size/3;
-	vars->player_y = i * vars->size + vars->size/3;
+	vars->player_x = j * vars->size + vars->size / 3;
+	vars->player_y = i * vars->size + vars->size / 3;
 	if (vars->map[j][i] == 'N')
 		vars->angle = 90;
 	else if (vars->map[j][i] == 'S')
@@ -40,8 +40,8 @@ int	validate_characters(t_vars *vars)
 		j = -1;
 		while (++j < (int)ft_strlen(vars->map[i]))
 		{
-			if (vars->map[i][j] != '0' &&
-				vars->map[i][j] != '1' && vars->map[i][j] != ' ')
+			if (vars->map[i][j] != '0' && vars->map[i][j] != '1'
+				&& vars->map[i][j] != ' ')
 			{
 				if (check_for_player(vars->map[i][j]))
 					(set_player_pos(vars, i, j), flag++);
@@ -55,7 +55,7 @@ int	validate_characters(t_vars *vars)
 	return (0);
 }
 
-int	filling_map(t_vars *vars, char *line, int fd)
+int	check_if_empty(t_vars *vars, char *line, int fd)
 {
 	int	i;
 	int	flag;
@@ -79,6 +79,12 @@ int	filling_map(t_vars *vars, char *line, int fd)
 	if (!vars->map)
 		return (1);
 	close(fd);
+	return (0);
+}
+
+int	filling_map(t_vars *vars, char *line, int fd, int i)
+{
+	check_if_empty(vars, line, fd);
 	fd = open(vars->map_name, O_RDONLY);
 	line = get_next_line(fd);
 	while (line)
@@ -88,7 +94,6 @@ int	filling_map(t_vars *vars, char *line, int fd)
 		free(line);
 		line = get_next_line(fd);
 	}
-	i = 0;
 	while (line)
 	{
 		if (*line == '\0')

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   math_help.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
+/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 20:25:34 by louisalah         #+#    #+#             */
-/*   Updated: 2024/12/26 01:25:17 by louisalah        ###   ########.fr       */
+/*   Updated: 2024/12/27 17:30:06 by asid-ahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,9 @@ float	ft_abs(float i)
 	if (i < 0.0)
 		return (-1 * i);
 	return (i);
+}
+
+int	rgb_to_hex(int r, int g, int b)
+{
+	return (r << 16 | g << 8 | b);
 }

@@ -3,19 +3,21 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+         #
+#    By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/05 16:48:25 by asid-ahm          #+#    #+#              #
-#    Updated: 2024/12/16 13:13:08 by louisalah        ###   ########.fr        #
+#    Updated: 2024/12/27 19:28:39 by asid-ahm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3d
 
 SRCS = cub3d.c ./parsing/all_free.c ./parsing/initialize_vars.c gnl/get_next_line.c \
-		./parsing/parse_colors.c ./parsing/printing_file.c ./parsing/validate_map.c\
+		./parsing/parse_colors.c ./parsing/validate_map.c\
 		./parsing/parse_map.c ./parsing/parse_comps.c ./execute/mlx_init.c \
-		./execute/move.c execute/render_map.c execute/math_help.c
+		./execute/move.c execute/render_map.c execute/math_help.c \
+		./execute/handle_keys.c ./execute/get_pixle.c ./execute/rays.c \
+		./execute/check_dist.c execute/textures.c
 
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
@@ -24,7 +26,8 @@ MLX_DIR = mlx
 MLX = $(MLX_DIR)/libmlx.a
 
 CC = cc
-CFLAGS = -g3 -I Includes -I $(LIBFT_DIR) -I $(MLX_DIR) -O3
+# CFLAGS = -g3 -I Includes -I -fsanitize=address $(LIBFT_DIR) -I $(MLX_DIR) -O3
+CFLAGS = -g3 -I Includes -I $(LIBFT_DIR) -I $(MLX_DIR) -fsanitize=address
 
 OBJS = $(SRCS:.c=.o)
 all: $(NAME)

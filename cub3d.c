@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
+/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:36:02 by mbamatra          #+#    #+#             */
-/*   Updated: 2024/12/27 14:13:45 by louisalah        ###   ########.fr       */
+/*   Updated: 2024/12/27 18:41:43 by asid-ahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ int	validate_mapex(char *file)
 	i = 0;
 	while (file[i])
 		i++;
-	if (((file[i - 1] == 'b' && file[i - 2] == 'u')
-			&& (file[i - 3] == 'c' && file[i - 4] == '.')))
+	if (((file[i - 1] == 'b' && file[i - 2] == 'u') && (file[i - 3] == 'c'
+				&& file[i - 4] == '.')))
 		return (0);
 	return (1);
 }
@@ -66,9 +66,7 @@ int	main(int argc, char **argv)
 	close(vars.map_fd);
 	if (init_mlx(&vars))
 		return (free_all(&vars), 1);
-	print_comps(&vars);
-	print_map(&vars);
-	mlx_hook(vars.mlx_win, 2, 0, ft_key_press, &vars); 
+	mlx_hook(vars.mlx_win, 2, 0, ft_key_press, &vars);
 	mlx_hook(vars.mlx_win, 3, 0, ft_key_release, &vars);
 	mlx_hook(vars.mlx_win, 17, 0, ft_quit, &vars);
 	mlx_loop_hook(vars.mlx, draw, &vars);

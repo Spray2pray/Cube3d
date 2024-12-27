@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialize_vars.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louisalah <louisalah@student.42.fr>        +#+  +:+       +#+        */
+/*   By: asid-ahm <asid-ahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:10:42 by asid-ahm          #+#    #+#             */
-/*   Updated: 2024/12/27 14:36:08 by louisalah        ###   ########.fr       */
+/*   Updated: 2024/12/27 17:56:21 by asid-ahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static void	init_map_vars(t_vars *vars, char **argv)
 	vars->we = NULL;
 	vars->ea = NULL;
 }
+
 void	initialize_vars(t_vars *vars, char **argv)
 {
 	init_map_vars(vars, argv);
